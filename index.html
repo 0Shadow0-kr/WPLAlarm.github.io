@@ -62,6 +62,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             text-align: left;
+            margin-bottom: 20px;
         }
         .result-box h3 {
             margin-top: 0;
@@ -87,7 +88,7 @@
         .countdown {
             color: #e74c3c;
             font-size: 22px;
-            font-weight: bold; /* 볼드체 추가됨 */
+            font-weight: bold;
             font-family: monospace;
             background: #fdf2f0;
             padding: 2px 8px;
@@ -101,6 +102,33 @@
         .highlight {
             color: #e67e22;
             font-weight: bold;
+        }
+        #showAllBtn {
+            background-color: #34495e;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: background-color 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        #showAllBtn:hover {
+            background-color: #2c3e50;
+        }
+        .all-list-item {
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .all-list-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
         }
     </style>
 </head>
@@ -129,22 +157,154 @@
         <div id="next-tourney" class="tourney-item">-</div>
     </div>
 
-    <script>
-        const tourneyData = [{"name": "클래식 400억 GTD", "buyin": 270000000, "maxRegTime": "01:29:00"}, {"name": "비기너스 4억 GTD", "buyin": 700000, "maxRegTime": "00:50:00"}, {"name": "워밍업 40억 GTD", "buyin": 35000000, "maxRegTime": "01:32:00"}, {"name": "클래식 프리즈아웃 100억 GTD", "buyin": 100000000, "maxRegTime": "01:47:00"}, {"name": "워밍업 터보 20억 GTD", "buyin": 10000000, "maxRegTime": "01:23:00"}, {"name": "클래식 300억 GTD", "buyin": 165000000, "maxRegTime": "02:29:00"}, {"name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "01:10:00"}, {"name": "클래식 50억 GTD", "buyin": 45000000, "maxRegTime": "02:32:00"}, {"name": "루키스 터보 3억 GTD", "buyin": 3000000, "maxRegTime": "02:15:00"}, {"name": "클래식 200억 GTD", "buyin": 180000000, "maxRegTime": "02:59:00"}, {"name": "클래식 200억 GTD", "buyin": 110000000, "maxRegTime": "03:29:00"}, {"name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "02:50:00"}, {"name": "스텝업 터보 10억 GTD", "buyin": 7000000, "maxRegTime": "03:00:00"}, {"name": "워밍업 35억 GTD", "buyin": 35000000, "maxRegTime": "03:47:00"}, {"name": "클래식 300억 GTD", "buyin": 330000000, "maxRegTime": "04:29:00"}, {"name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "03:10:00"}, {"name": "루키스 터보 4억 GTD", "buyin": 4500000, "maxRegTime": "04:00:00"}, {"name": "워밍업 35억 GTD", "buyin": 35000000, "maxRegTime": "04:47:00"}, {"name": "클래식 260억 GTD", "buyin": 280000000, "maxRegTime": "05:29:00"}, {"name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "04:50:00"}, {"name": "스텝업 터보 7억 GTD", "buyin": 6000000, "maxRegTime": "05:00:00"}, {"name": "클래식 60억 GTD", "buyin": 77000000, "maxRegTime": "05:47:00"}, {"name": "워밍업 20억 GTD", "buyin": 30000000, "maxRegTime": "06:17:00"}, {"name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "05:10:00"}, {"name": "루키스 터보 3.5억 GTD", "buyin": 3000000, "maxRegTime": "06:00:00"}, {"name": "스텝업 바운티 터보 10억 GTD", "buyin": 10000000, "maxRegTime": "06:23:00"}, {"name": "워밍업 35억 GTD", "buyin": 50000000, "maxRegTime": "07:17:00"}, {"name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "06:50:00"}, {"name": "루키스 터보 5억 GTD", "buyin": 5000000, "maxRegTime": "07:00:00"}, {"name": "스텝업 바운티 10억 GTD", "buyin": 10000000, "maxRegTime": "07:47:00"}, {"name": "클래식 35억 GTD", "buyin": 50000000, "maxRegTime": "08:17:00"}, {"name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "07:10:00"}, {"name": "루키스 2.7억 GTD", "buyin": 1500000, "maxRegTime": "08:10:00"}, {"name": "스텝업 터보 12억 GTD", "buyin": 12000000, "maxRegTime": "08:23:00"}, {"name": "클래식 200억 GTD", "buyin": 190000000, "maxRegTime": "09:29:00"}, {"name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "08:50:00"}, {"name": "루키스 터보 7억 GTD", "buyin": 5000000, "maxRegTime": "09:00:00"}, {"name": "클래식 70억 GTD", "buyin": 77000000, "maxRegTime": "09:47:00"}, {"name": "클래식 140억 GTD", "buyin": 110000000, "maxRegTime": "10:29:00"}, {"name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "09:10:00"}, {"name": "루키스 2억 GTD", "buyin": 1200000, "maxRegTime": "10:10:00"}, {"name": "스텝업 터보 15억 GTD", "buyin": 12000000, "maxRegTime": "10:15:00"}, {"name": "클래식 200억 GTD", "buyin": 165000000, "maxRegTime": "11:29:00"}, {"name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "10:50:00"}, {"name": "루키스 터보 5억 GTD", "buyin": 5000000, "maxRegTime": "11:00:00"}, {"name": "워밍업 터보 20억 GTD", "buyin": 12000000, "maxRegTime": "11:23:00"}, {"name": "클래식 170억 GTD", "buyin": 110000000, "maxRegTime": "12:29:00"}, {"name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "11:10:00"}, {"name": "스텝업 바운티 10억 GTD", "buyin": 10000000, "maxRegTime": "12:32:00"}, {"name": "루키스 터보 3억 GTD", "buyin": 3000000, "maxRegTime": "12:15:00"}, {"name": "워밍업 35억 GTD", "buyin": 35000000, "maxRegTime": "12:47:00"}, {"name": "클래식 370억 GTD", "buyin": 220000000, "maxRegTime": "13:29:00"}, {"name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "12:50:00"}, {"name": "워밍업 터보 17억 GTD", "buyin": 12000000, "maxRegTime": "13:08:00"}, {"name": "클래식 80억 GTD", "buyin": 77000000, "maxRegTime": "13:47:00"}, {"name": "루키스 터보 8억 GTD", "buyin": 5000000, "maxRegTime": "13:15:00"}, {"name": "클래식 250억 GTD", "buyin": 250000000, "maxRegTime": "14:29:00"}, {"name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "13:10:00"}, {"name": "워밍업 20억 GTD", "buyin": 10000000, "maxRegTime": "14:32:00"}, {"name": "클래식 80억 GTD", "buyin": 60000000, "maxRegTime": "14:47:00"}, {"name": "스텝업 터보 10억 GTD", "buyin": 7000000, "maxRegTime": "14:15:00"}, {"name": "클래식 370억 GTD", "buyin": 370000000, "maxRegTime": "15:29:00"}, {"name": "비기너스 4억 GTD", "buyin": 700000, "maxRegTime": "14:50:00"}, {"name": "클래식 90억 GTD", "buyin": 80000000, "maxRegTime": "15:32:00"}, {"name": "스텝업 터보 7억 GTD", "buyin": 6000000, "maxRegTime": "15:00:00"}, {"name": "클래식 바운티 160억 GTD", "buyin": 160000000, "maxRegTime": "16:04:00"}, {"name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "15:23:00"}, {"name": "클래식 400억 GTD", "buyin": 220000000, "maxRegTime": "16:29:00"}, {"name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "15:10:00"}, {"name": "스텝업 바운티 16억 GTD", "buyin": 10000000, "maxRegTime": "16:32:00"}, {"name": "클래식 프리즈아웃 60억 GTD", "buyin": 60000000, "maxRegTime": "16:47:00"}, {"name": "루키스 터보 5억 GTD", "buyin": 3000000, "maxRegTime": "16:15:00"}, {"name": "클래식 330억 GTD", "buyin": 330000000, "maxRegTime": "17:29:00"}, {"name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "16:50:00"}, {"name": "클래식 90억 GTD", "buyin": 80000000, "maxRegTime": "17:32:00"}, {"name": "스텝업 터보 9억 GTD", "buyin": 6000000, "maxRegTime": "17:00:00"}, {"name": "클래식 바운티 220억 GTD", "buyin": 220000000, "maxRegTime": "18:04:00"}, {"name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "17:23:00"}, {"name": "클래식 400억 GTD", "buyin": 220000000, "maxRegTime": "18:29:00"}, {"name": "프리롤 5천만 GTD", "buyin": 0, "maxRegTime": "17:10:00"}, {"name": "워밍업 25억 GTD", "buyin": 10000000, "maxRegTime": "18:32:00"}, {"name": "클래식 100억 GTD", "buyin": 80000000, "maxRegTime": "18:47:00"}, {"name": "루키스 3억 GTD", "buyin": 1200000, "maxRegTime": "18:25:00"}, {"name": "데일리 스페셜 450억 GTD", "buyin": 330000000, "maxRegTime": "19:29:00"}, {"name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "18:50:00"}, {"name": "스텝업 터보 9억 GTD", "buyin": 6000000, "maxRegTime": "19:00:00"}, {"name": "클래식 70억 GTD", "buyin": 35000000, "maxRegTime": "19:32:00"}, {"name": "클래식 165억 GTD", "buyin": 110000000, "maxRegTime": "20:04:00"}, {"name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "19:23:00"}, {"name": "데일리 스페셜 500억 GTD", "buyin": 330000000, "maxRegTime": "20:29:00"}, {"name": "프리롤 1억 GTD", "buyin": 0, "maxRegTime": "19:10:00"}, {"name": "클래식 70억 GTD", "buyin": 60000000, "maxRegTime": "20:32:00"}, {"name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "20:08:00"}, {"name": "클래식 50억 GTD", "buyin": 35000000, "maxRegTime": "20:47:00"}, {"name": "클래식 165억 GTD", "buyin": 110000000, "maxRegTime": "21:04:00"}, {"name": "루키스 터보 5억 GTD", "buyin": 3000000, "maxRegTime": "20:15:00"}, {"name": "데일리 스페셜 550억 GTD", "buyin": 370000000, "maxRegTime": "21:29:00"}, {"name": "비기너스 4억 GTD", "buyin": 700000, "maxRegTime": "20:50:00"}, {"name": "클래식 프리즈아웃 90억 GTD", "buyin": 80000000, "maxRegTime": "21:32:00"}, {"name": "스텝업 터보 14억 GTD", "buyin": 7000000, "maxRegTime": "21:00:00"}, {"name": "클래식 270억 GTD", "buyin": 180000000, "maxRegTime": "22:04:00"}, {"name": "클래식 70억 GTD", "buyin": 45000000, "maxRegTime": "21:47:00"}, {"name": "위켄드 빌리언즈 미니 100억 GTD(주말)", "buyin": 60000000, "maxRegTime": "22:17:00"}, {"name": "데일리 메인 1,600억 GTD(평일)", "buyin": 400000000, "maxRegTime": "22:29:00"}, {"name": "위켄드 빌리언즈 3,200억 GTD(주말)", "buyin": 800000000, "maxRegTime": "22:29:00"}, {"name": "데일리 미니 메인 150억 GTD(평일)", "buyin": 25000000, "maxRegTime": "22:17:00"}, {"name": "프리롤 1억 GTD", "buyin": 0, "maxRegTime": "21:10:00"}, {"name": "클래식 65억 GTD(평일)", "buyin": 60000000, "maxRegTime": "22:32:00"}, {"name": "클래식 60억 GTD(주말)", "buyin": 35000000, "maxRegTime": "22:32:00"}, {"name": "클래식 200억 GTD(매일)", "buyin": 110000000, "maxRegTime": "23:04:00"}, {"name": "스텝업 터보 15억 GTD(매일)", "buyin": 6000000, "maxRegTime": "22:15:00"}, {"name": "데일리 스페셜 하이롤러 800억 GTD", "buyin": 550000000, "maxRegTime": "1900-01-01 00:02:00"}, {"name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "22:50:00"}, {"name": "스텝업 터보 18억 GTD", "buyin": 10000000, "maxRegTime": "23:08:00"}, {"name": "클래식 200억 GTD", "buyin": 110000000, "maxRegTime": "23:44:00"}, {"name": "클래식 90억 GTD", "buyin": 55000000, "maxRegTime": "23:47:00"}, {"name": "데일리 스페셜 500억 GTD", "buyin": 250000000, "maxRegTime": "23:59:00"}, {"name": "데일리 스페셜 슈퍼 하이롤러 1,200억 GTD", "buyin": 1000000000, "maxRegTime": "1900-01-01 01:02:00"}, {"name": "프리롤 1억 GTD", "buyin": 0, "maxRegTime": "23:10:00"}, {"name": "스텝업 터보 18억 GTD", "buyin": 10000000, "maxRegTime": "1900-01-01 00:08:00"}, {"name": "클래식 200억 GTD", "buyin": 110000000, "maxRegTime": "1900-01-01 00:44:00"}, {"name": "클래식 70억 GTD", "buyin": 45000000, "maxRegTime": "1900-01-01 00:47:00"}, {"name": "데일리 스페셜 500억 GTD", "buyin": 300000000, "maxRegTime": "1900-01-01 00:59:00"}];
+    <button id="showAllBtn">레지 가능한 모든 토너 띄우기 (바이인 역순)</button>
 
-        // 엑셀에서 넘어온 자정 이후 시간 포맷 정리
-        tourneyData.forEach(t => {
-            if (t.maxRegTime.includes(' ')) {
-                t.maxRegTime = t.maxRegTime.split(' ')[1];
-            }
-        });
+    <div id="all-tourneys-box" class="result-box" style="display: none;">
+        <h3>✅ 현재 레지 가능한 전체 토너먼트</h3>
+        <div id="all-tourneys-content"></div>
+    </div>
+
+    <script>
+        // 3사 스케쥴.xlsx WPL 시트 데이터 (시작시간 포함)
+        const tourneyData = [
+            {"startTime": "00:00:00", "name": "클래식 400억 GTD", "buyin": 270000000, "maxRegTime": "01:29:00"},
+            {"startTime": "00:00:00", "name": "비기너스 4억 GTD", "buyin": 700000, "maxRegTime": "00:50:00"},
+            {"startTime": "00:15:00", "name": "워밍업 40억 GTD", "buyin": 35000000, "maxRegTime": "01:32:00"},
+            {"startTime": "00:30:00", "name": "클래식 프리즈아웃 100억 GTD", "buyin": 100000000, "maxRegTime": "01:47:00"},
+            {"startTime": "00:30:00", "name": "워밍업 터보 20억 GTD", "buyin": 10000000, "maxRegTime": "01:23:00"},
+            {"startTime": "01:00:00", "name": "클래식 300억 GTD", "buyin": 165000000, "maxRegTime": "02:29:00"},
+            {"startTime": "01:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "01:10:00"},
+            {"startTime": "01:15:00", "name": "클래식 50억 GTD", "buyin": 45000000, "maxRegTime": "02:32:00"},
+            {"startTime": "01:30:00", "name": "루키스 터보 3억 GTD", "buyin": 3000000, "maxRegTime": "02:15:00"},
+            {"startTime": "01:30:00", "name": "클래식 200억 GTD", "buyin": 180000000, "maxRegTime": "02:59:00"},
+            {"startTime": "02:00:00", "name": "클래식 200억 GTD", "buyin": 110000000, "maxRegTime": "03:29:00"},
+            {"startTime": "02:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "02:50:00"},
+            {"startTime": "02:15:00", "name": "스텝업 터보 10억 GTD", "buyin": 7000000, "maxRegTime": "03:00:00"},
+            {"startTime": "02:30:00", "name": "워밍업 35억 GTD", "buyin": 35000000, "maxRegTime": "03:47:00"},
+            {"startTime": "03:00:00", "name": "클래식 300억 GTD", "buyin": 330000000, "maxRegTime": "04:29:00"},
+            {"startTime": "03:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "03:10:00"},
+            {"startTime": "03:15:00", "name": "루키스 터보 4억 GTD", "buyin": 4500000, "maxRegTime": "04:00:00"},
+            {"startTime": "03:30:00", "name": "워밍업 35억 GTD", "buyin": 35000000, "maxRegTime": "04:47:00"},
+            {"startTime": "04:00:00", "name": "클래식 260억 GTD", "buyin": 280000000, "maxRegTime": "05:29:00"},
+            {"startTime": "04:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "04:50:00"},
+            {"startTime": "04:15:00", "name": "스텝업 터보 7억 GTD", "buyin": 6000000, "maxRegTime": "05:00:00"},
+            {"startTime": "04:30:00", "name": "클래식 60억 GTD", "buyin": 77000000, "maxRegTime": "05:47:00"},
+            {"startTime": "05:00:00", "name": "워밍업 20억 GTD", "buyin": 30000000, "maxRegTime": "06:17:00"},
+            {"startTime": "05:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "05:10:00"},
+            {"startTime": "05:15:00", "name": "루키스 터보 3.5억 GTD", "buyin": 3000000, "maxRegTime": "06:00:00"},
+            {"startTime": "05:30:00", "name": "스텝업 바운티 터보 10억 GTD", "buyin": 10000000, "maxRegTime": "06:23:00"},
+            {"startTime": "06:00:00", "name": "워밍업 35억 GTD", "buyin": 50000000, "maxRegTime": "07:17:00"},
+            {"startTime": "06:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "06:50:00"},
+            {"startTime": "06:15:00", "name": "루키스 터보 5억 GTD", "buyin": 5000000, "maxRegTime": "07:00:00"},
+            {"startTime": "06:30:00", "name": "스텝업 바운티 10억 GTD", "buyin": 10000000, "maxRegTime": "07:47:00"},
+            {"startTime": "07:00:00", "name": "클래식 35억 GTD", "buyin": 50000000, "maxRegTime": "08:17:00"},
+            {"startTime": "07:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "07:10:00"},
+            {"startTime": "07:15:00", "name": "루키스 2.7억 GTD", "buyin": 1500000, "maxRegTime": "08:10:00"},
+            {"startTime": "07:30:00", "name": "스텝업 터보 12억 GTD", "buyin": 12000000, "maxRegTime": "08:23:00"},
+            {"startTime": "08:00:00", "name": "클래식 200억 GTD", "buyin": 190000000, "maxRegTime": "09:29:00"},
+            {"startTime": "08:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "08:50:00"},
+            {"startTime": "08:15:00", "name": "루키스 터보 7억 GTD", "buyin": 5000000, "maxRegTime": "09:00:00"},
+            {"startTime": "08:30:00", "name": "클래식 70억 GTD", "buyin": 77000000, "maxRegTime": "09:47:00"},
+            {"startTime": "09:00:00", "name": "클래식 140억 GTD", "buyin": 110000000, "maxRegTime": "10:29:00"},
+            {"startTime": "09:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "09:10:00"},
+            {"startTime": "09:15:00", "name": "루키스 2억 GTD", "buyin": 1200000, "maxRegTime": "10:10:00"},
+            {"startTime": "09:30:00", "name": "스텝업 터보 15억 GTD", "buyin": 12000000, "maxRegTime": "10:15:00"},
+            {"startTime": "10:00:00", "name": "클래식 200억 GTD", "buyin": 165000000, "maxRegTime": "11:29:00"},
+            {"startTime": "10:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "10:50:00"},
+            {"startTime": "10:15:00", "name": "루키스 터보 5억 GTD", "buyin": 5000000, "maxRegTime": "11:00:00"},
+            {"startTime": "10:30:00", "name": "워밍업 터보 20억 GTD", "buyin": 12000000, "maxRegTime": "11:23:00"},
+            {"startTime": "11:00:00", "name": "클래식 170억 GTD", "buyin": 110000000, "maxRegTime": "12:29:00"},
+            {"startTime": "11:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "11:10:00"},
+            {"startTime": "11:15:00", "name": "스텝업 바운티 10억 GTD", "buyin": 10000000, "maxRegTime": "12:32:00"},
+            {"startTime": "11:30:00", "name": "루키스 터보 3억 GTD", "buyin": 3000000, "maxRegTime": "12:15:00"},
+            {"startTime": "11:30:00", "name": "워밍업 35억 GTD", "buyin": 35000000, "maxRegTime": "12:47:00"},
+            {"startTime": "12:00:00", "name": "클래식 370억 GTD", "buyin": 220000000, "maxRegTime": "13:29:00"},
+            {"startTime": "12:00:00", "name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "12:50:00"},
+            {"startTime": "12:15:00", "name": "워밍업 터보 17억 GTD", "buyin": 12000000, "maxRegTime": "13:08:00"},
+            {"startTime": "12:30:00", "name": "클래식 80억 GTD", "buyin": 77000000, "maxRegTime": "13:47:00"},
+            {"startTime": "12:30:00", "name": "루키스 터보 8억 GTD", "buyin": 5000000, "maxRegTime": "13:15:00"},
+            {"startTime": "13:00:00", "name": "클래식 250억 GTD", "buyin": 250000000, "maxRegTime": "14:29:00"},
+            {"startTime": "13:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "13:10:00"},
+            {"startTime": "13:15:00", "name": "워밍업 20억 GTD", "buyin": 10000000, "maxRegTime": "14:32:00"},
+            {"startTime": "13:30:00", "name": "클래식 80억 GTD", "buyin": 60000000, "maxRegTime": "14:47:00"},
+            {"startTime": "13:30:00", "name": "스텝업 터보 10억 GTD", "buyin": 7000000, "maxRegTime": "14:15:00"},
+            {"startTime": "14:00:00", "name": "클래식 370억 GTD", "buyin": 370000000, "maxRegTime": "15:29:00"},
+            {"startTime": "14:00:00", "name": "비기너스 4억 GTD", "buyin": 700000, "maxRegTime": "14:50:00"},
+            {"startTime": "14:15:00", "name": "클래식 90억 GTD", "buyin": 80000000, "maxRegTime": "15:32:00"},
+            {"startTime": "14:15:00", "name": "스텝업 터보 7억 GTD", "buyin": 6000000, "maxRegTime": "15:00:00"},
+            {"startTime": "14:30:00", "name": "클래식 바운티 160억 GTD", "buyin": 160000000, "maxRegTime": "16:04:00"},
+            {"startTime": "14:30:00", "name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "15:23:00"},
+            {"startTime": "15:00:00", "name": "클래식 400억 GTD", "buyin": 220000000, "maxRegTime": "16:29:00"},
+            {"startTime": "15:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "15:10:00"},
+            {"startTime": "15:15:00", "name": "스텝업 바운티 16억 GTD", "buyin": 10000000, "maxRegTime": "16:32:00"},
+            {"startTime": "15:30:00", "name": "클래식 프리즈아웃 60억 GTD", "buyin": 60000000, "maxRegTime": "16:47:00"},
+            {"startTime": "15:30:00", "name": "루키스 터보 5억 GTD", "buyin": 3000000, "maxRegTime": "16:15:00"},
+            {"startTime": "16:00:00", "name": "클래식 330억 GTD", "buyin": 330000000, "maxRegTime": "17:29:00"},
+            {"startTime": "16:00:00", "name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "16:50:00"},
+            {"startTime": "16:15:00", "name": "클래식 90억 GTD", "buyin": 80000000, "maxRegTime": "17:32:00"},
+            {"startTime": "16:15:00", "name": "스텝업 터보 9억 GTD", "buyin": 6000000, "maxRegTime": "17:00:00"},
+            {"startTime": "16:30:00", "name": "클래식 바운티 220억 GTD", "buyin": 220000000, "maxRegTime": "18:04:00"},
+            {"startTime": "16:30:00", "name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "17:23:00"},
+            {"startTime": "17:00:00", "name": "클래식 400억 GTD", "buyin": 220000000, "maxRegTime": "18:29:00"},
+            {"startTime": "17:00:00", "name": "프리롤 5천만 GTD", "buyin": 0, "maxRegTime": "17:10:00"},
+            {"startTime": "17:15:00", "name": "워밍업 25억 GTD", "buyin": 10000000, "maxRegTime": "18:32:00"},
+            {"startTime": "17:30:00", "name": "클래식 100억 GTD", "buyin": 80000000, "maxRegTime": "18:47:00"},
+            {"startTime": "17:30:00", "name": "루키스 3억 GTD", "buyin": 1200000, "maxRegTime": "18:25:00"},
+            {"startTime": "18:00:00", "name": "데일리 스페셜 450억 GTD", "buyin": 330000000, "maxRegTime": "19:29:00"},
+            {"startTime": "18:00:00", "name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "18:50:00"},
+            {"startTime": "18:15:00", "name": "스텝업 터보 9억 GTD", "buyin": 6000000, "maxRegTime": "19:00:00"},
+            {"startTime": "18:15:00", "name": "클래식 70억 GTD", "buyin": 35000000, "maxRegTime": "19:32:00"},
+            {"startTime": "18:30:00", "name": "클래식 165억 GTD", "buyin": 110000000, "maxRegTime": "20:04:00"},
+            {"startTime": "18:30:00", "name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "19:23:00"},
+            {"startTime": "19:00:00", "name": "데일리 스페셜 500억 GTD", "buyin": 330000000, "maxRegTime": "20:29:00"},
+            {"startTime": "19:00:00", "name": "프리롤 1억 GTD", "buyin": 0, "maxRegTime": "19:10:00"},
+            {"startTime": "19:15:00", "name": "클래식 70억 GTD", "buyin": 60000000, "maxRegTime": "20:32:00"},
+            {"startTime": "19:15:00", "name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "20:08:00"},
+            {"startTime": "19:30:00", "name": "클래식 50억 GTD", "buyin": 35000000, "maxRegTime": "20:47:00"},
+            {"startTime": "19:30:00", "name": "클래식 165억 GTD", "buyin": 110000000, "maxRegTime": "21:04:00"},
+            {"startTime": "19:30:00", "name": "루키스 터보 5억 GTD", "buyin": 3000000, "maxRegTime": "20:15:00"},
+            {"startTime": "20:00:00", "name": "데일리 스페셜 550억 GTD", "buyin": 370000000, "maxRegTime": "21:29:00"},
+            {"startTime": "20:00:00", "name": "비기너스 4억 GTD", "buyin": 700000, "maxRegTime": "20:50:00"},
+            {"startTime": "20:15:00", "name": "클래식 프리즈아웃 90억 GTD", "buyin": 80000000, "maxRegTime": "21:32:00"},
+            {"startTime": "20:15:00", "name": "스텝업 터보 14억 GTD", "buyin": 7000000, "maxRegTime": "21:00:00"},
+            {"startTime": "20:30:00", "name": "클래식 270억 GTD", "buyin": 180000000, "maxRegTime": "22:04:00"},
+            {"startTime": "20:30:00", "name": "클래식 70억 GTD", "buyin": 45000000, "maxRegTime": "21:47:00"},
+            {"startTime": "21:00:00", "name": "위켄드 빌리언즈 미니 100억 GTD(주말)", "buyin": 60000000, "maxRegTime": "22:17:00"},
+            {"startTime": "21:00:00", "name": "데일리 메인 1,600억 GTD(평일)", "buyin": 400000000, "maxRegTime": "22:29:00"},
+            {"startTime": "21:00:00", "name": "위켄드 빌리언즈 3,200억 GTD(주말)", "buyin": 800000000, "maxRegTime": "22:29:00"},
+            {"startTime": "21:00:00", "name": "데일리 미니 메인 150억 GTD(평일)", "buyin": 25000000, "maxRegTime": "22:17:00"},
+            {"startTime": "21:00:00", "name": "프리롤 1억 GTD", "buyin": 0, "maxRegTime": "21:10:00"},
+            {"startTime": "21:15:00", "name": "클래식 65억 GTD(평일)", "buyin": 60000000, "maxRegTime": "22:32:00"},
+            {"startTime": "21:15:00", "name": "클래식 60억 GTD(주말)", "buyin": 35000000, "maxRegTime": "22:32:00"},
+            {"startTime": "21:30:00", "name": "클래식 200억 GTD(매일)", "buyin": 110000000, "maxRegTime": "23:04:00"},
+            {"startTime": "21:30:00", "name": "스텝업 터보 15억 GTD(매일)", "buyin": 6000000, "maxRegTime": "22:15:00"},
+            {"startTime": "22:00:00", "name": "데일리 스페셜 하이롤러 800억 GTD", "buyin": 550000000, "maxRegTime": "00:02:00"},
+            {"startTime": "22:00:00", "name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "22:50:00"},
+            {"startTime": "22:15:00", "name": "스텝업 터보 18억 GTD", "buyin": 10000000, "maxRegTime": "23:08:00"},
+            {"startTime": "22:15:00", "name": "클래식 200억 GTD", "buyin": 110000000, "maxRegTime": "23:44:00"},
+            {"startTime": "22:30:00", "name": "클래식 90억 GTD", "buyin": 55000000, "maxRegTime": "23:47:00"},
+            {"startTime": "22:30:00", "name": "데일리 스페셜 500억 GTD", "buyin": 250000000, "maxRegTime": "23:59:00"},
+            {"startTime": "23:00:00", "name": "데일리 스페셜 슈퍼 하이롤러 1,200억 GTD", "buyin": 1000000000, "maxRegTime": "01:02:00"},
+            {"startTime": "23:00:00", "name": "프리롤 1억 GTD", "buyin": 0, "maxRegTime": "23:10:00"},
+            {"startTime": "23:15:00", "name": "스텝업 터보 18억 GTD", "buyin": 10000000, "maxRegTime": "00:08:00"},
+            {"startTime": "23:15:00", "name": "클래식 200억 GTD", "buyin": 110000000, "maxRegTime": "00:44:00"},
+            {"startTime": "23:30:00", "name": "클래식 70억 GTD", "buyin": 45000000, "maxRegTime": "00:47:00"},
+            {"startTime": "23:30:00", "name": "데일리 스페셜 500억 GTD", "buyin": 300000000, "maxRegTime": "00:59:00"}
+        ];
+
+        let showAllBox = false;
+
+        // localStorage에서 값 불러오기
+        const savedMin = localStorage.getItem('wpl_minBuyin');
+        const savedMax = localStorage.getItem('wpl_maxBuyin');
+        if (savedMin !== null) document.getElementById('minBuyin').value = savedMin;
+        if (savedMax !== null) document.getElementById('maxBuyin').value = savedMax;
 
         function timeToSeconds(timeStr) {
             let parts = timeStr.split(':');
             return parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]);
         }
 
-        // 초 단위의 남은 시간을 "시:분:초" (1시간 미만이면 "분:초")로 포맷팅
         function formatCountdown(totalSeconds) {
             const h = Math.floor(totalSeconds / 3600);
             const m = Math.floor((totalSeconds % 3600) / 60);
@@ -156,12 +316,32 @@
             return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
         }
 
+        // 현재 시간이 토너먼트 진행 시간(startTime ~ maxRegTime) 내에 있는지 확인
+        function isCurrentlyRegisterable(t, nowSec) {
+            let s = timeToSeconds(t.startTime);
+            let e = timeToSeconds(t.maxRegTime);
+            if (e < s) e += 86400; // 자정 넘김 처리
+
+            // 오늘 시작한 토너
+            if (nowSec >= s && nowSec <= e) {
+                t.currentInstanceEndSec = e;
+                return true;
+            }
+            
+            // 어제 시작해서 현재 진행 중인 토너
+            let s_yest = s - 86400;
+            let e_yest = e - 86400;
+            if (nowSec >= s_yest && nowSec <= e_yest) {
+                t.currentInstanceEndSec = e_yest;
+                return true;
+            }
+            
+            return false;
+        }
+
         function formatResultHTML(tourney) {
             if (!tourney) return `<div class="tourney-name">조건에 맞는 토너먼트가 없습니다.</div>`;
-            
-            // 실시간 카운트다운 생성
             const countdownStr = formatCountdown(tourney.diff);
-
             return `
                 <div class="tourney-name">
                     ${tourney.name} 
@@ -176,7 +356,6 @@
 
         function updateClockAndTournaments() {
             const now = new Date();
-            
             const h = String(now.getHours()).padStart(2, '0');
             const m = String(now.getMinutes()).padStart(2, '0');
             const s = String(now.getSeconds()).padStart(2, '0');
@@ -188,29 +367,75 @@
             const minB = Number(document.getElementById('minBuyin').value) || 0;
             const maxB = Number(document.getElementById('maxBuyin').value) || Infinity;
 
+            // 1. 가장 가까운 토너먼트 처리 (기존 로직)
             let filtered = tourneyData.filter(t => t.buyin >= minB && t.buyin <= maxB);
             
             filtered.forEach(t => {
                 let tSec = timeToSeconds(t.maxRegTime);
                 let diff = tSec - nowSec;
-                
-                if (diff < 0) {
-                    diff += 86400; 
-                }
+                if (diff < 0) diff += 86400; 
                 t.diff = diff;
             });
 
-            filtered.sort((a, b) => a.diff - b.diff);
+            // 시간 차이 오름차순으로 가장 가까운 것 찾기
+            let sortedForNext = [...filtered].sort((a, b) => a.diff - b.diff);
 
-            document.getElementById('closest-tourney').innerHTML = formatResultHTML(filtered[0] || null);
-            document.getElementById('next-tourney').innerHTML = formatResultHTML(filtered[1] || null);
+            document.getElementById('closest-tourney').innerHTML = formatResultHTML(sortedForNext[0] || null);
+            document.getElementById('next-tourney').innerHTML = formatResultHTML(sortedForNext[1] || null);
+
+            // 2. 모든 토너먼트 표시 (버튼 클릭 시)
+            if (showAllBox) {
+                let registerable = filtered.filter(t => isCurrentlyRegisterable(t, nowSec));
+                
+                // 바이인 기준 역순(내림차순) 정렬
+                registerable.sort((a, b) => b.buyin - a.buyin);
+
+                let allHtml = '';
+                if (registerable.length === 0) {
+                    allHtml = '<div style="margin-top: 10px;">현재 레지 가능한 토너먼트가 없습니다.</div>';
+                } else {
+                    registerable.forEach(t => {
+                        let diffToClose = t.currentInstanceEndSec - nowSec;
+                        allHtml += `
+                            <div class="all-list-item">
+                                <div class="tourney-name">
+                                    ${t.name}
+                                    <span class="countdown" style="font-size: 18px;">${formatCountdown(diffToClose)}</span>
+                                </div>
+                                <div class="tourney-details">
+                                    시작: <span class="highlight">${t.startTime}</span> ~ 
+                                    마감: <span class="highlight">${t.maxRegTime}</span> 
+                                    (바이인: ${t.buyin.toLocaleString()})
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                document.getElementById('all-tourneys-content').innerHTML = allHtml;
+            }
         }
         
+        // 버튼 이벤트 
+        document.getElementById('showAllBtn').addEventListener('click', () => {
+            showAllBox = !showAllBox;
+            document.getElementById('all-tourneys-box').style.display = showAllBox ? 'block' : 'none';
+            document.getElementById('showAllBtn').innerText = showAllBox 
+                ? '목록 닫기' 
+                : '레지 가능한 모든 토너 띄우기 (바이인 역순)';
+            updateClockAndTournaments();
+        });
+
+        // 입력 값 변경 시 localStorage 저장 및 업데이트
+        document.getElementById('minBuyin').addEventListener('input', function() {
+            localStorage.setItem('wpl_minBuyin', this.value);
+            updateClockAndTournaments();
+        });
+        document.getElementById('maxBuyin').addEventListener('input', function() {
+            localStorage.setItem('wpl_maxBuyin', this.value);
+            updateClockAndTournaments();
+        });
+        
         setInterval(updateClockAndTournaments, 1000);
-        
-        document.getElementById('minBuyin').addEventListener('input', updateClockAndTournaments);
-        document.getElementById('maxBuyin').addEventListener('input', updateClockAndTournaments);
-        
         updateClockAndTournaments();
     </script>
 </body>
