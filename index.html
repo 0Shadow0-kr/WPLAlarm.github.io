@@ -167,6 +167,22 @@
     <script>
         // 3사 스케쥴.xlsx WPL 시트 데이터 (시작시간 포함)
         const tourneyData = [
+            // --- [제8회 홀덤 마스터스] 특별 일정 추가 시작 ---
+            {"startTime": "17:00:00", "name": "[제8회 홀덤 마스터스] 프리롤 - 7억 티켓 20장 GTD", "buyin": 0, "maxRegTime": "17:30:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
+            
+            {"startTime": "13:00:00", "name": "[제8회 홀덤 마스터스] 새틀 for 새틀 토너먼트", "buyin": 70000000, "maxRegTime": "13:30:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
+            {"startTime": "17:00:00", "name": "[제8회 홀덤 마스터스] 새틀 for 새틀 토너먼트", "buyin": 70000000, "maxRegTime": "17:30:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
+            {"startTime": "20:00:00", "name": "[제8회 홀덤 마스터스] 새틀 for 새틀 토너먼트", "buyin": 70000000, "maxRegTime": "20:30:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
+            
+            {"startTime": "18:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "19:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
+            {"startTime": "19:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "20:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
+            {"startTime": "20:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "21:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
+            {"startTime": "21:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "22:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
+            {"startTime": "22:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "23:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
+            {"startTime": "23:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "00:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
+            {"startTime": "00:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "01:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
+            // --- [제8회 홀덤 마스터스] 특별 일정 추가 끝 ---
+
             {"startTime": "00:00:00", "name": "클래식 400억 GTD", "buyin": 270000000, "maxRegTime": "01:29:00"},
             {"startTime": "00:00:00", "name": "비기너스 4억 GTD", "buyin": 700000, "maxRegTime": "00:50:00"},
             {"startTime": "00:15:00", "name": "워밍업 40억 GTD", "buyin": 35000000, "maxRegTime": "01:32:00"},
@@ -342,6 +358,9 @@
         function formatResultHTML(tourney) {
             if (!tourney) return `<div class="tourney-name">조건에 맞는 토너먼트가 없습니다.</div>`;
             const countdownStr = formatCountdown(tourney.diff);
+            // 바이인 출력을 0일 경우 '프리롤'로 표기하도록 수정
+            const buyinStr = tourney.buyin === 0 ? "프리롤" : tourney.buyin.toLocaleString();
+            
             return `
                 <div class="tourney-name">
                     ${tourney.name} 
@@ -349,7 +368,7 @@
                 </div>
                 <div class="tourney-details">
                     맥스레잇 레지: <span class="highlight">${tourney.maxRegTime}</span> 
-                    (바이인: ${tourney.buyin.toLocaleString()})
+                    (바이인: ${buyinStr})
                 </div>
             `;
         }
@@ -361,14 +380,26 @@
             const s = String(now.getSeconds()).padStart(2, '0');
             const currentStr = `${h}:${m}:${s}`;
             
+            // 기간 필터링용 날짜 포맷 (YYYY-MM-DD)
+            const yyyy = now.getFullYear();
+            const MM = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const currentDateStr = `${yyyy}-${MM}-${dd}`;
+            
             document.getElementById('clock').innerText = currentStr;
 
             const nowSec = timeToSeconds(currentStr);
             const minB = Number(document.getElementById('minBuyin').value) || 0;
             const maxB = Number(document.getElementById('maxBuyin').value) || Infinity;
 
-            // 1. 가장 가까운 토너먼트 처리 (기존 로직)
-            let filtered = tourneyData.filter(t => t.buyin >= minB && t.buyin <= maxB);
+            // 1. 기간 및 바이인 필터링
+            let filtered = tourneyData.filter(t => {
+                // 지정된 기간이 존재하는 특별 토너먼트의 경우, 현재 날짜가 범위 내인지 확인
+                if (t.startDate && currentDateStr < t.startDate) return false;
+                if (t.endDate && currentDateStr > t.endDate) return false;
+                
+                return t.buyin >= minB && t.buyin <= maxB;
+            });
             
             filtered.forEach(t => {
                 let tSec = timeToSeconds(t.maxRegTime);
@@ -396,6 +427,7 @@
                 } else {
                     registerable.forEach(t => {
                         let diffToClose = t.currentInstanceEndSec - nowSec;
+                        let buyinStr = t.buyin === 0 ? "프리롤" : t.buyin.toLocaleString();
                         allHtml += `
                             <div class="all-list-item">
                                 <div class="tourney-name">
@@ -405,7 +437,7 @@
                                 <div class="tourney-details">
                                     시작: <span class="highlight">${t.startTime}</span> ~ 
                                     마감: <span class="highlight">${t.maxRegTime}</span> 
-                                    (바이인: ${t.buyin.toLocaleString()})
+                                    (바이인: ${buyinStr})
                                 </div>
                             </div>
                         `;
