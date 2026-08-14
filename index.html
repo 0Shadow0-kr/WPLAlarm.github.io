@@ -332,6 +332,20 @@
             return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
         }
 
+        // 바이인 금액을 억, 만 단위로 포맷팅하는 함수
+        function formatBuyin(amount) {
+            if (amount === 0) return "프리롤";
+            
+            const uk = Math.floor(amount / 100000000);
+            const man = Math.floor((amount % 100000000) / 10000);
+            
+            let result = [];
+            if (uk > 0) result.push(`${uk}억`);
+            if (man > 0) result.push(`${man.toLocaleString()}만`);
+            
+            return result.length > 0 ? result.join(' ') : `${amount.toLocaleString()}원`;
+        }
+
         // 현재 시간이 토너먼트 진행 시간(startTime ~ maxRegTime) 내에 있는지 확인
         function isCurrentlyRegisterable(t, nowSec) {
             let s = timeToSeconds(t.startTime);
@@ -358,8 +372,7 @@
         function formatResultHTML(tourney) {
             if (!tourney) return `<div class="tourney-name">조건에 맞는 토너먼트가 없습니다.</div>`;
             const countdownStr = formatCountdown(tourney.diff);
-            // 바이인 출력을 0일 경우 '프리롤'로 표기하도록 수정
-            const buyinStr = tourney.buyin === 0 ? "프리롤" : tourney.buyin.toLocaleString();
+            const buyinStr = formatBuyin(tourney.buyin);
             
             return `
                 <div class="tourney-name">
@@ -427,7 +440,7 @@
                 } else {
                     registerable.forEach(t => {
                         let diffToClose = t.currentInstanceEndSec - nowSec;
-                        let buyinStr = t.buyin === 0 ? "프리롤" : t.buyin.toLocaleString();
+                        let buyinStr = formatBuyin(t.buyin);
                         allHtml += `
                             <div class="all-list-item">
                                 <div class="tourney-name">
