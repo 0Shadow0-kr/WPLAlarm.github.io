@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WPL 토너먼트 맥스레잇 레지 알리미</title>
+    <title>WPL 토너먼트 맥스레잇 & 타겟BB 레지 알리미</title>
     <style>
         body {
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
             background-color: #f4f7f6;
             color: #333;
             max-width: 600px;
@@ -16,127 +16,71 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             text-align: center;
         }
-        h1 {
-            color: #2c3e50;
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
+        h1 { color: #2c3e50; font-size: 24px; margin-bottom: 10px; }
         #clock {
-            font-size: 32px;
-            font-weight: bold;
-            color: #e74c3c;
-            margin: 20px 0;
-            background: #fff;
-            padding: 15px;
-            border-radius: 8px;
+            font-size: 32px; font-weight: bold; color: #e74c3c; margin: 20px 0;
+            background: #fff; padding: 15px; border-radius: 8px;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
         }
         .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex; flex-direction: column; gap: 15px;
+            background: #fff; padding: 20px; border-radius: 8px;
+            margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .input-group {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .input-group { display: flex; justify-content: space-between; align-items: center; }
+        .input-group label { font-weight: 600; }
+        .input-group input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 60%; font-size: 16px; }
+        
+        .bb-buttons {
+            display: flex; gap: 10px; margin-top: 10px; justify-content: center;
         }
-        .input-group label {
-            font-weight: 600;
+        .bb-btn {
+            flex: 1; padding: 12px; font-size: 16px; font-weight: bold;
+            border: none; border-radius: 6px; cursor: pointer;
+            background-color: #ecf0f1; color: #34495e; transition: all 0.2s;
         }
-        .input-group input {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 60%;
-            font-size: 16px;
+        .bb-btn.active {
+            background-color: #3498db; color: #fff; box-shadow: inset 0 3px 5px rgba(0,0,0,0.2);
         }
+        
         .result-box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            text-align: left;
-            margin-bottom: 20px;
+            background: #fff; padding: 20px; border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: left; margin-bottom: 20px;
         }
         .result-box h3 {
-            margin-top: 0;
-            color: #2980b9;
-            font-size: 18px;
-            border-bottom: 2px solid #ecf0f1;
-            padding-bottom: 8px;
+            margin-top: 0; color: #2980b9; font-size: 18px;
+            border-bottom: 2px solid #ecf0f1; padding-bottom: 8px; display: flex; justify-content: space-between;
         }
-        .tourney-item {
-            margin-bottom: 20px;
+        .mode-badge {
+            background: #e74c3c; color: white; padding: 3px 8px; border-radius: 12px; font-size: 12px;
         }
-        .tourney-item:last-child {
-            margin-bottom: 0;
-        }
+        .tourney-item { margin-bottom: 20px; }
+        .tourney-item:last-child { margin-bottom: 0; }
         .tourney-name {
-            font-size: 20px;
-            font-weight: bold;
-            color: #2c3e50;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            font-size: 18px; font-weight: bold; color: #2c3e50;
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
         }
         .countdown {
-            color: #e74c3c;
-            font-size: 22px;
-            font-weight: bold;
-            font-family: monospace;
-            background: #fdf2f0;
-            padding: 2px 8px;
-            border-radius: 4px;
+            color: #e74c3c; font-size: 22px; font-weight: bold; font-family: monospace;
+            background: #fdf2f0; padding: 2px 8px; border-radius: 4px;
         }
-        .tourney-details {
-            font-size: 15px;
-            color: #7f8c8d;
-            margin-top: 5px;
-        }
-        .highlight {
-            color: #e67e22;
-            font-weight: bold;
-        }
+        .tourney-details { font-size: 15px; color: #7f8c8d; }
+        .highlight { color: #e67e22; font-weight: bold; }
+        
         #showAllBtn {
-            background-color: #34495e;
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            width: 100%;
-            transition: background-color 0.2s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            background-color: #34495e; color: white; border: none; padding: 15px; font-size: 16px;
+            border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: background-color 0.2s;
         }
-        #showAllBtn:hover {
-            background-color: #2c3e50;
-        }
-        .all-list-item {
-            border-bottom: 1px dashed #ccc;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-        }
-        .all-list-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
+        #showAllBtn:hover { background-color: #2c3e50; }
+        .all-list-item { border-bottom: 1px dashed #ccc; padding-bottom: 15px; margin-bottom: 15px; }
+        .all-list-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
     </style>
 </head>
 <body>
 
-    <h1>WPL 맥스레잇 레지 타이머</h1>
+    <h1>WPL 레지 타이머</h1>
     
-    <div id="clock">현재 시각: 00:00:00</div>
+    <div id="clock">00:00:00</div>
     
     <div class="controls">
         <div class="input-group">
@@ -147,176 +91,194 @@
             <label for="maxBuyin">최대 바이인</label>
             <input type="number" id="maxBuyin" value="1000000000" step="1000000">
         </div>
+        <div class="bb-buttons">
+            <button class="bb-btn active" data-mode="max">맥스레잇</button>
+            <button class="bb-btn" data-mode="10">10BB</button>
+            <button class="bb-btn" data-mode="15">15BB</button>
+            <button class="bb-btn" data-mode="20">20BB</button>
+        </div>
     </div>
 
     <div class="result-box">
-        <h3>🔥 가장 가까운 토너먼트</h3>
+        <h3>🔥 가장 가까운 입장 타이밍 <span id="mode-badge-1" class="mode-badge">맥스레잇 기준</span></h3>
         <div id="closest-tourney" class="tourney-item">-</div>
         
-        <h3>⏳ 그 다음 토너먼트</h3>
+        <h3>⏳ 그 다음 입장 타이밍 <span id="mode-badge-2" class="mode-badge">맥스레잇 기준</span></h3>
         <div id="next-tourney" class="tourney-item">-</div>
     </div>
 
     <button id="showAllBtn">레지 가능한 모든 토너 보기</button>
 
     <div id="all-tourneys-box" class="result-box" style="display: none;">
-        <h3>✅ 현재 레지 가능한 전체 토너먼트</h3>
+        <h3 id="all-list-title">✅ 현재 레지 가능한 전체 토너먼트 (맥스레잇 기준)</h3>
         <div id="all-tourneys-content"></div>
     </div>
 
     <script>
-        // 3사 스케쥴.xlsx WPL 시트 데이터 (시작시간 포함)
         const tourneyData = [
-            // --- [제8회 홀덤 마스터스] 특별 일정 추가 시작 ---
-            {"startTime": "17:00:00", "name": "[제8회 홀덤 마스터스] 프리롤 - 7억 티켓 20장 GTD", "buyin": 0, "maxRegTime": "17:30:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
+            { "startTime": "17:00:00", "name": "[제8회 홀덤 마스터스] 프리롤 - 7억 티켓 20장 GTD", "buyin": 0, "maxRegTime": "17:30:00", "startDate": "2026-08-03", "endDate": "2026-10-01", "target20BB": "17:06:00", "target15BB": "17:09:00", "target10BB": "17:15:00" },
+            { "startTime": "13:00:00", "name": "[제8회 홀덤 마스터스] 새틀 for 새틀 토너먼트", "buyin": 70000000, "maxRegTime": "13:30:00", "startDate": "2026-08-03", "endDate": "2026-10-01", "target20BB": "13:06:00", "target15BB": "13:09:00", "target10BB": "13:15:00" },
+            { "startTime": "17:00:00", "name": "[제8회 홀덤 마스터스] 새틀 for 새틀 토너먼트", "buyin": 70000000, "maxRegTime": "17:30:00", "startDate": "2026-08-03", "endDate": "2026-10-01", "target20BB": "17:06:00", "target15BB": "17:09:00", "target10BB": "17:15:00" },
+            { "startTime": "20:00:00", "name": "[제8회 홀덤 마스터스] 새틀 for 새틀 토너먼트", "buyin": 70000000, "maxRegTime": "20:30:00", "startDate": "2026-08-03", "endDate": "2026-10-01", "target20BB": "20:06:00", "target15BB": "20:09:00", "target10BB": "20:15:00" },
+            { "startTime": "18:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "19:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01", "target20BB": "18:56:00", "target15BB": "19:14:00", "target10BB": "19:34:00" },
+            { "startTime": "19:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "20:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01", "target20BB": "19:56:00", "target15BB": "20:14:00", "target10BB": "20:34:00" },
+            { "startTime": "20:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "21:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01", "target20BB": "20:56:00", "target15BB": "21:14:00", "target10BB": "21:34:00" },
+            { "startTime": "21:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "22:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01", "target20BB": "21:56:00", "target15BB": "22:14:00", "target10BB": "22:34:00" },
+            { "startTime": "22:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "23:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01", "target20BB": "22:56:00", "target15BB": "23:14:00", "target10BB": "23:34:00" },
+            { "startTime": "23:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "00:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01", "target20BB": "23:56:00", "target15BB": "00:14:00", "target10BB": "00:34:00" },
+            { "startTime": "00:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "01:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01", "target20BB": "00:56:00", "target15BB": "01:14:00", "target10BB": "01:34:00" },
             
-            {"startTime": "13:00:00", "name": "[제8회 홀덤 마스터스] 새틀 for 새틀 토너먼트", "buyin": 70000000, "maxRegTime": "13:30:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
-            {"startTime": "17:00:00", "name": "[제8회 홀덤 마스터스] 새틀 for 새틀 토너먼트", "buyin": 70000000, "maxRegTime": "17:30:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
-            {"startTime": "20:00:00", "name": "[제8회 홀덤 마스터스] 새틀 for 새틀 토너먼트", "buyin": 70000000, "maxRegTime": "20:30:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
-            
-            {"startTime": "18:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "19:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
-            {"startTime": "19:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "20:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
-            {"startTime": "20:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "21:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
-            {"startTime": "21:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "22:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
-            {"startTime": "22:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "23:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
-            {"startTime": "23:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "00:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
-            {"startTime": "00:00:00", "name": "[제8회 홀덤 마스터스] 초대권 15장 GTD", "buyin": 700000000, "maxRegTime": "01:50:00", "startDate": "2026-08-03", "endDate": "2026-10-01"},
-            // --- [제8회 홀덤 마스터스] 특별 일정 추가 끝 ---
-
-            {"startTime": "00:00:00", "name": "클래식 400억 GTD", "buyin": 270000000, "maxRegTime": "01:29:00"},
-            {"startTime": "00:00:00", "name": "비기너스 4억 GTD", "buyin": 700000, "maxRegTime": "00:50:00"},
-            {"startTime": "00:15:00", "name": "워밍업 40억 GTD", "buyin": 35000000, "maxRegTime": "01:32:00"},
-            {"startTime": "00:30:00", "name": "클래식 프리즈아웃 100억 GTD", "buyin": 100000000, "maxRegTime": "01:47:00"},
-            {"startTime": "00:30:00", "name": "워밍업 터보 20억 GTD", "buyin": 10000000, "maxRegTime": "01:23:00"},
-            {"startTime": "01:00:00", "name": "클래식 300억 GTD", "buyin": 165000000, "maxRegTime": "02:29:00"},
-            {"startTime": "01:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "01:10:00"},
-            {"startTime": "01:15:00", "name": "클래식 50억 GTD", "buyin": 45000000, "maxRegTime": "02:32:00"},
-            {"startTime": "01:30:00", "name": "루키스 터보 3억 GTD", "buyin": 3000000, "maxRegTime": "02:15:00"},
-            {"startTime": "01:30:00", "name": "클래식 200억 GTD", "buyin": 180000000, "maxRegTime": "02:59:00"},
-            {"startTime": "02:00:00", "name": "클래식 200억 GTD", "buyin": 110000000, "maxRegTime": "03:29:00"},
-            {"startTime": "02:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "02:50:00"},
-            {"startTime": "02:15:00", "name": "스텝업 터보 10억 GTD", "buyin": 7000000, "maxRegTime": "03:00:00"},
-            {"startTime": "02:30:00", "name": "워밍업 35억 GTD", "buyin": 35000000, "maxRegTime": "03:47:00"},
-            {"startTime": "03:00:00", "name": "클래식 300억 GTD", "buyin": 330000000, "maxRegTime": "04:29:00"},
-            {"startTime": "03:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "03:10:00"},
-            {"startTime": "03:15:00", "name": "루키스 터보 4억 GTD", "buyin": 4500000, "maxRegTime": "04:00:00"},
-            {"startTime": "03:30:00", "name": "워밍업 35억 GTD", "buyin": 35000000, "maxRegTime": "04:47:00"},
-            {"startTime": "04:00:00", "name": "클래식 260억 GTD", "buyin": 280000000, "maxRegTime": "05:29:00"},
-            {"startTime": "04:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "04:50:00"},
-            {"startTime": "04:15:00", "name": "스텝업 터보 7억 GTD", "buyin": 6000000, "maxRegTime": "05:00:00"},
-            {"startTime": "04:30:00", "name": "클래식 60억 GTD", "buyin": 77000000, "maxRegTime": "05:47:00"},
-            {"startTime": "05:00:00", "name": "워밍업 20억 GTD", "buyin": 30000000, "maxRegTime": "06:17:00"},
-            {"startTime": "05:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "05:10:00"},
-            {"startTime": "05:15:00", "name": "루키스 터보 3.5억 GTD", "buyin": 3000000, "maxRegTime": "06:00:00"},
-            {"startTime": "05:30:00", "name": "스텝업 바운티 터보 10억 GTD", "buyin": 10000000, "maxRegTime": "06:23:00"},
-            {"startTime": "06:00:00", "name": "워밍업 35억 GTD", "buyin": 50000000, "maxRegTime": "07:17:00"},
-            {"startTime": "06:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "06:50:00"},
-            {"startTime": "06:15:00", "name": "루키스 터보 5억 GTD", "buyin": 5000000, "maxRegTime": "07:00:00"},
-            {"startTime": "06:30:00", "name": "스텝업 바운티 10억 GTD", "buyin": 10000000, "maxRegTime": "07:47:00"},
-            {"startTime": "07:00:00", "name": "클래식 35억 GTD", "buyin": 50000000, "maxRegTime": "08:17:00"},
-            {"startTime": "07:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "07:10:00"},
-            {"startTime": "07:15:00", "name": "루키스 2.7억 GTD", "buyin": 1500000, "maxRegTime": "08:10:00"},
-            {"startTime": "07:30:00", "name": "스텝업 터보 12억 GTD", "buyin": 12000000, "maxRegTime": "08:23:00"},
-            {"startTime": "08:00:00", "name": "클래식 200억 GTD", "buyin": 190000000, "maxRegTime": "09:29:00"},
-            {"startTime": "08:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "08:50:00"},
-            {"startTime": "08:15:00", "name": "루키스 터보 7억 GTD", "buyin": 5000000, "maxRegTime": "09:00:00"},
-            {"startTime": "08:30:00", "name": "클래식 70억 GTD", "buyin": 77000000, "maxRegTime": "09:47:00"},
-            {"startTime": "09:00:00", "name": "클래식 140억 GTD", "buyin": 110000000, "maxRegTime": "10:29:00"},
-            {"startTime": "09:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "09:10:00"},
-            {"startTime": "09:15:00", "name": "루키스 2억 GTD", "buyin": 1200000, "maxRegTime": "10:10:00"},
-            {"startTime": "09:30:00", "name": "스텝업 터보 15억 GTD", "buyin": 12000000, "maxRegTime": "10:23:00"},
-            {"startTime": "10:00:00", "name": "클래식 200억 GTD", "buyin": 165000000, "maxRegTime": "11:29:00"},
-            {"startTime": "10:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "10:50:00"},
-            {"startTime": "10:15:00", "name": "루키스 터보 5억 GTD", "buyin": 5000000, "maxRegTime": "11:00:00"},
-            {"startTime": "10:30:00", "name": "워밍업 터보 20억 GTD", "buyin": 12000000, "maxRegTime": "11:23:00"},
-            {"startTime": "11:00:00", "name": "클래식 170억 GTD", "buyin": 110000000, "maxRegTime": "12:29:00"},
-            {"startTime": "11:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "11:10:00"},
-            {"startTime": "11:15:00", "name": "스텝업 바운티 10억 GTD", "buyin": 10000000, "maxRegTime": "12:32:00"},
-            {"startTime": "11:30:00", "name": "루키스 터보 3억 GTD", "buyin": 3000000, "maxRegTime": "12:15:00"},
-            {"startTime": "11:30:00", "name": "워밍업 35억 GTD", "buyin": 35000000, "maxRegTime": "12:47:00"},
-            {"startTime": "12:00:00", "name": "클래식 370억 GTD", "buyin": 220000000, "maxRegTime": "13:29:00"},
-            {"startTime": "12:00:00", "name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "12:50:00"},
-            {"startTime": "12:15:00", "name": "워밍업 터보 17억 GTD", "buyin": 12000000, "maxRegTime": "13:08:00"},
-            {"startTime": "12:30:00", "name": "클래식 80억 GTD", "buyin": 77000000, "maxRegTime": "13:47:00"},
-            {"startTime": "12:30:00", "name": "루키스 터보 8억 GTD", "buyin": 5000000, "maxRegTime": "13:15:00"},
-            {"startTime": "13:00:00", "name": "클래식 250억 GTD", "buyin": 250000000, "maxRegTime": "14:29:00"},
-            {"startTime": "13:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "13:10:00"},
-            {"startTime": "13:15:00", "name": "워밍업 20억 GTD", "buyin": 10000000, "maxRegTime": "14:32:00"},
-            {"startTime": "13:30:00", "name": "클래식 80억 GTD", "buyin": 60000000, "maxRegTime": "14:47:00"},
-            {"startTime": "13:30:00", "name": "스텝업 터보 10억 GTD", "buyin": 7000000, "maxRegTime": "14:15:00"},
-            {"startTime": "14:00:00", "name": "클래식 370억 GTD", "buyin": 370000000, "maxRegTime": "15:29:00"},
-            {"startTime": "14:00:00", "name": "비기너스 4억 GTD", "buyin": 700000, "maxRegTime": "14:50:00"},
-            {"startTime": "14:15:00", "name": "클래식 90억 GTD", "buyin": 80000000, "maxRegTime": "15:32:00"},
-            {"startTime": "14:15:00", "name": "스텝업 터보 7억 GTD", "buyin": 6000000, "maxRegTime": "15:00:00"},
-            {"startTime": "14:30:00", "name": "클래식 바운티 160억 GTD", "buyin": 160000000, "maxRegTime": "16:04:00"},
-            {"startTime": "14:30:00", "name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "15:23:00"},
-            {"startTime": "15:00:00", "name": "클래식 400억 GTD", "buyin": 220000000, "maxRegTime": "16:29:00"},
-            {"startTime": "15:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "15:10:00"},
-            {"startTime": "15:15:00", "name": "스텝업 바운티 16억 GTD", "buyin": 10000000, "maxRegTime": "16:32:00"},
-            {"startTime": "15:30:00", "name": "클래식 프리즈아웃 60억 GTD", "buyin": 60000000, "maxRegTime": "16:47:00"},
-            {"startTime": "15:30:00", "name": "루키스 터보 5억 GTD", "buyin": 3000000, "maxRegTime": "16:15:00"},
-            {"startTime": "16:00:00", "name": "클래식 330억 GTD", "buyin": 330000000, "maxRegTime": "17:29:00"},
-            {"startTime": "16:00:00", "name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "16:50:00"},
-            {"startTime": "16:15:00", "name": "클래식 90억 GTD", "buyin": 80000000, "maxRegTime": "17:32:00"},
-            {"startTime": "16:15:00", "name": "스텝업 터보 9억 GTD", "buyin": 6000000, "maxRegTime": "17:00:00"},
-            {"startTime": "16:30:00", "name": "클래식 바운티 220억 GTD", "buyin": 220000000, "maxRegTime": "18:04:00"},
-            {"startTime": "16:30:00", "name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "17:23:00"},
-            {"startTime": "17:00:00", "name": "클래식 400억 GTD", "buyin": 220000000, "maxRegTime": "18:29:00"},
-            {"startTime": "17:00:00", "name": "프리롤 5천만 GTD", "buyin": 0, "maxRegTime": "17:10:00"},
-            {"startTime": "17:15:00", "name": "워밍업 25억 GTD", "buyin": 10000000, "maxRegTime": "18:32:00"},
-            {"startTime": "17:30:00", "name": "클래식 100억 GTD", "buyin": 80000000, "maxRegTime": "18:47:00"},
-            {"startTime": "17:30:00", "name": "루키스 3억 GTD", "buyin": 1200000, "maxRegTime": "18:25:00"},
-            {"startTime": "18:00:00", "name": "데일리 스페셜 450억 GTD", "buyin": 330000000, "maxRegTime": "19:29:00"},
-            {"startTime": "18:00:00", "name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "18:50:00"},
-            {"startTime": "18:15:00", "name": "스텝업 터보 9억 GTD", "buyin": 6000000, "maxRegTime": "19:00:00"},
-            {"startTime": "18:15:00", "name": "클래식 70억 GTD", "buyin": 35000000, "maxRegTime": "19:32:00"},
-            {"startTime": "18:30:00", "name": "클래식 165억 GTD", "buyin": 110000000, "maxRegTime": "20:04:00"},
-            {"startTime": "18:30:00", "name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "19:23:00"},
-            {"startTime": "19:00:00", "name": "데일리 스페셜 500억 GTD", "buyin": 330000000, "maxRegTime": "20:29:00"},
-            {"startTime": "19:00:00", "name": "프리롤 1억 GTD", "buyin": 0, "maxRegTime": "19:10:00"},
-            {"startTime": "19:15:00", "name": "클래식 70억 GTD", "buyin": 60000000, "maxRegTime": "20:32:00"},
-            {"startTime": "19:15:00", "name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "20:08:00"},
-            {"startTime": "19:30:00", "name": "클래식 50억 GTD", "buyin": 35000000, "maxRegTime": "20:47:00"},
-            {"startTime": "19:30:00", "name": "클래식 165억 GTD", "buyin": 110000000, "maxRegTime": "21:04:00"},
-            {"startTime": "19:30:00", "name": "루키스 터보 5억 GTD", "buyin": 3000000, "maxRegTime": "20:15:00"},
-            {"startTime": "20:00:00", "name": "데일리 스페셜 550억 GTD", "buyin": 370000000, "maxRegTime": "21:29:00"},
-            {"startTime": "20:00:00", "name": "비기너스 4억 GTD", "buyin": 700000, "maxRegTime": "20:50:00"},
-            {"startTime": "20:15:00", "name": "클래식 프리즈아웃 90억 GTD", "buyin": 80000000, "maxRegTime": "21:32:00"},
-            {"startTime": "20:15:00", "name": "스텝업 터보 14억 GTD", "buyin": 7000000, "maxRegTime": "21:00:00"},
-            {"startTime": "20:30:00", "name": "클래식 270억 GTD", "buyin": 180000000, "maxRegTime": "22:04:00"},
-            {"startTime": "20:30:00", "name": "클래식 70억 GTD", "buyin": 45000000, "maxRegTime": "21:47:00"},
-            {"startTime": "21:00:00", "name": "위켄드 빌리언즈 미니 100억 GTD(주말)", "buyin": 60000000, "maxRegTime": "22:17:00"},
-            {"startTime": "21:00:00", "name": "데일리 메인 1,600억 GTD(평일)", "buyin": 400000000, "maxRegTime": "22:29:00"},
-            {"startTime": "21:00:00", "name": "위켄드 빌리언즈 3,200억 GTD(주말)", "buyin": 800000000, "maxRegTime": "22:29:00"},
-            {"startTime": "21:00:00", "name": "데일리 미니 메인 150억 GTD(평일)", "buyin": 25000000, "maxRegTime": "22:17:00"},
-            {"startTime": "21:00:00", "name": "프리롤 1억 GTD", "buyin": 0, "maxRegTime": "21:10:00"},
-            {"startTime": "21:15:00", "name": "클래식 65억 GTD(평일)", "buyin": 60000000, "maxRegTime": "22:32:00"},
-            {"startTime": "21:15:00", "name": "클래식 60억 GTD(주말)", "buyin": 35000000, "maxRegTime": "22:32:00"},
-            {"startTime": "21:30:00", "name": "클래식 200억 GTD(매일)", "buyin": 110000000, "maxRegTime": "23:04:00"},
-            {"startTime": "21:30:00", "name": "스텝업 터보 15억 GTD(매일)", "buyin": 6000000, "maxRegTime": "22:15:00"},
-            {"startTime": "22:00:00", "name": "데일리 스페셜 하이롤러 800억 GTD", "buyin": 550000000, "maxRegTime": "00:02:00"},
-            {"startTime": "22:00:00", "name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "22:50:00"},
-            {"startTime": "22:15:00", "name": "스텝업 터보 18억 GTD", "buyin": 10000000, "maxRegTime": "23:08:00"},
-            {"startTime": "22:15:00", "name": "클래식 200억 GTD", "buyin": 110000000, "maxRegTime": "23:44:00"},
-            {"startTime": "22:30:00", "name": "클래식 90억 GTD", "buyin": 55000000, "maxRegTime": "23:47:00"},
-            {"startTime": "22:30:00", "name": "데일리 스페셜 500억 GTD", "buyin": 250000000, "maxRegTime": "23:59:00"},
-            {"startTime": "23:00:00", "name": "데일리 스페셜 슈퍼 하이롤러 1,200억 GTD", "buyin": 1000000000, "maxRegTime": "01:02:00"},
-            {"startTime": "23:00:00", "name": "프리롤 1억 GTD", "buyin": 0, "maxRegTime": "23:10:00"},
-            {"startTime": "23:15:00", "name": "스텝업 터보 18억 GTD", "buyin": 10000000, "maxRegTime": "00:08:00"},
-            {"startTime": "23:15:00", "name": "클래식 200억 GTD", "buyin": 110000000, "maxRegTime": "00:44:00"},
-            {"startTime": "23:30:00", "name": "클래식 70억 GTD", "buyin": 45000000, "maxRegTime": "00:47:00"},
-            {"startTime": "23:30:00", "name": "데일리 스페셜 500억 GTD", "buyin": 300000000, "maxRegTime": "00:59:00"}
+            { "startTime": "00:00:00", "name": "클래식 400억 GTD", "buyin": 270000000, "maxRegTime": "01:29:00", "target20BB": "00:42:00", "target15BB": "00:48:00", "target10BB": "01:05:00" },
+            { "startTime": "00:00:00", "name": "비기너스 4억 GTD", "buyin": 700000, "maxRegTime": "00:50:00", "target20BB": "00:10:00", "target15BB": "00:15:00", "target10BB": "00:25:00" },
+            { "startTime": "00:15:00", "name": "워밍업 40억 GTD", "buyin": 35000000, "maxRegTime": "01:32:00", "target20BB": "01:02:00", "target15BB": "01:08:00", "target10BB": "01:20:00" },
+            { "startTime": "00:30:00", "name": "클래식 프리즈아웃 100억 GTD", "buyin": 100000000, "maxRegTime": "01:47:00", "target20BB": "01:17:00", "target15BB": "01:23:00", "target10BB": "01:35:00" },
+            { "startTime": "00:30:00", "name": "워밍업 터보 20억 GTD", "buyin": 10000000, "maxRegTime": "01:23:00", "target20BB": "00:50:00", "target15BB": "00:54:00", "target10BB": "01:07:00" },
+            { "startTime": "01:00:00", "name": "클래식 300억 GTD", "buyin": 165000000, "maxRegTime": "02:29:00", "target20BB": "01:48:00", "target15BB": "01:54:00", "target10BB": "02:11:00" },
+            { "startTime": "01:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "01:10:00", "target20BB": "01:04:00", "target15BB": "01:04:00", "target10BB": "01:08:00" },
+            { "startTime": "01:15:00", "name": "클래식 50억 GTD", "buyin": 45000000, "maxRegTime": "02:32:00", "target20BB": "02:02:00", "target15BB": "02:08:00", "target10BB": "02:20:00" },
+            { "startTime": "01:30:00", "name": "루키스 터보 3억 GTD", "buyin": 3000000, "maxRegTime": "02:15:00", "target20BB": "01:38:00", "target15BB": "01:42:00", "target10BB": "01:50:00" },
+            { "startTime": "01:30:00", "name": "클래식 200억 GTD", "buyin": 180000000, "maxRegTime": "02:59:00", "target20BB": "02:17:00", "target15BB": "02:23:00", "target10BB": "02:35:00" },
+            { "startTime": "02:00:00", "name": "클래식 200억 GTD", "buyin": 110000000, "maxRegTime": "03:29:00", "target20BB": "02:42:00", "target15BB": "02:48:00", "target10BB": "03:05:00" },
+            { "startTime": "02:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "02:50:00", "target20BB": "02:10:00", "target15BB": "02:15:00", "target10BB": "02:25:00" },
+            { "startTime": "02:15:00", "name": "스텝업 터보 10억 GTD", "buyin": 7000000, "maxRegTime": "03:00:00", "target20BB": "02:35:00", "target15BB": "02:39:00", "target10BB": "02:47:00" },
+            { "startTime": "02:30:00", "name": "워밍업 35억 GTD", "buyin": 35000000, "maxRegTime": "03:47:00", "target20BB": "03:17:00", "target15BB": "03:23:00", "target10BB": "03:35:00" },
+            { "startTime": "03:00:00", "name": "클래식 300억 GTD", "buyin": 330000000, "maxRegTime": "04:29:00", "target20BB": "03:42:00", "target15BB": "03:48:00", "target10BB": "04:05:00" },
+            { "startTime": "03:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "03:10:00", "target20BB": "03:04:00", "target15BB": "03:04:00", "target10BB": "03:08:00" },
+            { "startTime": "03:15:00", "name": "루키스 터보 4억 GTD", "buyin": 4500000, "maxRegTime": "04:00:00", "target20BB": "03:23:00", "target15BB": "03:27:00", "target10BB": "03:35:00" },
+            { "startTime": "03:30:00", "name": "워밍업 35억 GTD", "buyin": 35000000, "maxRegTime": "04:47:00", "target20BB": "04:17:00", "target15BB": "04:23:00", "target10BB": "04:35:00" },
+            { "startTime": "04:00:00", "name": "클래식 260억 GTD", "buyin": 280000000, "maxRegTime": "05:29:00", "target20BB": "04:42:00", "target15BB": "04:48:00", "target10BB": "05:05:00" },
+            { "startTime": "04:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "04:50:00", "target20BB": "04:10:00", "target15BB": "04:15:00", "target10BB": "04:25:00" },
+            { "startTime": "04:15:00", "name": "스텝업 터보 7억 GTD", "buyin": 6000000, "maxRegTime": "05:00:00", "target20BB": "04:35:00", "target15BB": "04:39:00", "target10BB": "04:47:00" },
+            { "startTime": "04:30:00", "name": "클래식 60억 GTD", "buyin": 77000000, "maxRegTime": "05:47:00", "target20BB": "05:17:00", "target15BB": "05:23:00", "target10BB": "05:35:00" },
+            { "startTime": "05:00:00", "name": "워밍업 20억 GTD", "buyin": 30000000, "maxRegTime": "06:17:00", "target20BB": "05:42:00", "target15BB": "05:48:00", "target10BB": "06:05:00" },
+            { "startTime": "05:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "05:10:00", "target20BB": "05:04:00", "target15BB": "05:04:00", "target10BB": "05:08:00" },
+            { "startTime": "05:15:00", "name": "루키스 터보 3.5억 GTD", "buyin": 3000000, "maxRegTime": "06:00:00", "target20BB": "05:23:00", "target15BB": "05:27:00", "target10BB": "05:35:00" },
+            { "startTime": "05:30:00", "name": "스텝업 바운티 터보 10억 GTD", "buyin": 10000000, "maxRegTime": "06:23:00", "target20BB": "05:54:00", "target15BB": "06:03:00", "target10BB": "06:11:00" },
+            { "startTime": "06:00:00", "name": "워밍업 35억 GTD", "buyin": 50000000, "maxRegTime": "07:17:00", "target20BB": "06:42:00", "target15BB": "06:48:00", "target10BB": "07:05:00" },
+            { "startTime": "06:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "06:50:00", "target20BB": "06:10:00", "target15BB": "06:15:00", "target10BB": "06:25:00" },
+            { "startTime": "06:15:00", "name": "루키스 터보 5억 GTD", "buyin": 5000000, "maxRegTime": "07:00:00", "target20BB": "06:23:00", "target15BB": "06:27:00", "target10BB": "06:35:00" },
+            { "startTime": "06:30:00", "name": "스텝업 바운티 10억 GTD", "buyin": 10000000, "maxRegTime": "07:47:00", "target20BB": "07:17:00", "target15BB": "07:23:00", "target10BB": "07:35:00" },
+            { "startTime": "07:00:00", "name": "클래식 35억 GTD", "buyin": 50000000, "maxRegTime": "08:17:00", "target20BB": "07:48:00", "target15BB": "07:54:00", "target10BB": "08:11:00" },
+            { "startTime": "07:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "07:10:00", "target20BB": "07:04:00", "target15BB": "07:04:00", "target10BB": "07:08:00" },
+            { "startTime": "07:15:00", "name": "루키스 2.7억 GTD", "buyin": 1500000, "maxRegTime": "08:10:00", "target20BB": "07:25:00", "target15BB": "07:30:00", "target10BB": "07:40:00" },
+            { "startTime": "07:30:00", "name": "스텝업 터보 12억 GTD", "buyin": 12000000, "maxRegTime": "08:23:00", "target20BB": "07:54:00", "target15BB": "08:03:00", "target10BB": "08:11:00" },
+            { "startTime": "08:00:00", "name": "클래식 200억 GTD", "buyin": 190000000, "maxRegTime": "09:29:00", "target20BB": "08:42:00", "target15BB": "08:48:00", "target10BB": "09:05:00" },
+            { "startTime": "08:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "08:50:00", "target20BB": "08:10:00", "target15BB": "08:15:00", "target10BB": "08:25:00" },
+            { "startTime": "08:15:00", "name": "루키스 터보 7억 GTD", "buyin": 5000000, "maxRegTime": "09:00:00", "target20BB": "08:23:00", "target15BB": "08:27:00", "target10BB": "08:35:00" },
+            { "startTime": "08:30:00", "name": "클래식 70억 GTD", "buyin": 77000000, "maxRegTime": "09:47:00", "target20BB": "09:17:00", "target15BB": "09:23:00", "target10BB": "09:35:00" },
+            { "startTime": "09:00:00", "name": "클래식 140억 GTD", "buyin": 110000000, "maxRegTime": "10:29:00", "target20BB": "09:42:00", "target15BB": "09:48:00", "target10BB": "10:05:00" },
+            { "startTime": "09:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "09:10:00", "target20BB": "09:04:00", "target15BB": "09:04:00", "target10BB": "09:08:00" },
+            { "startTime": "09:15:00", "name": "루키스 2억 GTD", "buyin": 1200000, "maxRegTime": "10:10:00", "target20BB": "09:25:00", "target15BB": "09:30:00", "target10BB": "09:40:00" },
+            { "startTime": "09:30:00", "name": "스텝업 터보 15억 GTD", "buyin": 12000000, "maxRegTime": "10:23:00", "target20BB": "09:54:00", "target15BB": "10:03:00", "target10BB": "10:11:00" },
+            { "startTime": "10:00:00", "name": "클래식 200억 GTD", "buyin": 165000000, "maxRegTime": "11:29:00", "target20BB": "10:42:00", "target15BB": "10:48:00", "target10BB": "11:05:00" },
+            { "startTime": "10:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "10:50:00", "target20BB": "10:10:00", "target15BB": "10:15:00", "target10BB": "10:25:00" },
+            { "startTime": "10:15:00", "name": "루키스 터보 5억 GTD", "buyin": 5000000, "maxRegTime": "11:00:00", "target20BB": "10:23:00", "target15BB": "10:27:00", "target10BB": "10:35:00" },
+            { "startTime": "10:30:00", "name": "워밍업 터보 20억 GTD", "buyin": 12000000, "maxRegTime": "11:23:00", "target20BB": "10:50:00", "target15BB": "10:54:00", "target10BB": "11:07:00" },
+            { "startTime": "11:00:00", "name": "클래식 170억 GTD", "buyin": 110000000, "maxRegTime": "12:29:00", "target20BB": "11:42:00", "target15BB": "11:48:00", "target10BB": "12:05:00" },
+            { "startTime": "11:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "11:10:00", "target20BB": "11:04:00", "target15BB": "11:04:00", "target10BB": "11:08:00" },
+            { "startTime": "11:15:00", "name": "스텝업 바운티 10억 GTD", "buyin": 10000000, "maxRegTime": "12:32:00", "target20BB": "12:02:00", "target15BB": "12:08:00", "target10BB": "12:20:00" },
+            { "startTime": "11:30:00", "name": "루키스 터보 3억 GTD", "buyin": 3000000, "maxRegTime": "12:15:00", "target20BB": "11:38:00", "target15BB": "11:42:00", "target10BB": "11:50:00" },
+            { "startTime": "11:30:00", "name": "워밍업 35억 GTD", "buyin": 35000000, "maxRegTime": "12:47:00", "target20BB": "12:17:00", "target15BB": "12:23:00", "target10BB": "12:35:00" },
+            { "startTime": "12:00:00", "name": "클래식 370억 GTD", "buyin": 220000000, "maxRegTime": "13:29:00", "target20BB": "12:42:00", "target15BB": "12:48:00", "target10BB": "13:05:00" },
+            { "startTime": "12:00:00", "name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "12:50:00", "target20BB": "12:10:00", "target15BB": "12:15:00", "target10BB": "12:25:00" },
+            { "startTime": "12:15:00", "name": "워밍업 터보 17억 GTD", "buyin": 12000000, "maxRegTime": "13:08:00", "target20BB": "12:35:00", "target15BB": "12:39:00", "target10BB": "12:47:00" },
+            { "startTime": "12:30:00", "name": "클래식 80억 GTD", "buyin": 77000000, "maxRegTime": "13:47:00", "target20BB": "13:17:00", "target15BB": "13:23:00", "target10BB": "13:35:00" },
+            { "startTime": "12:30:00", "name": "루키스 터보 8억 GTD", "buyin": 5000000, "maxRegTime": "13:15:00", "target20BB": "12:38:00", "target15BB": "12:42:00", "target10BB": "12:50:00" },
+            { "startTime": "13:00:00", "name": "클래식 250억 GTD", "buyin": 250000000, "maxRegTime": "14:29:00", "target20BB": "13:42:00", "target15BB": "13:48:00", "target10BB": "14:05:00" },
+            { "startTime": "13:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "13:10:00", "target20BB": "13:04:00", "target15BB": "13:04:00", "target10BB": "13:08:00" },
+            { "startTime": "13:15:00", "name": "워밍업 20억 GTD", "buyin": 10000000, "maxRegTime": "14:32:00", "target20BB": "14:02:00", "target15BB": "14:08:00", "target10BB": "14:20:00" },
+            { "startTime": "13:30:00", "name": "클래식 80억 GTD", "buyin": 60000000, "maxRegTime": "14:47:00", "target20BB": "14:17:00", "target15BB": "14:23:00", "target10BB": "14:35:00" },
+            { "startTime": "13:30:00", "name": "스텝업 터보 10억 GTD", "buyin": 7000000, "maxRegTime": "14:15:00", "target20BB": "13:54:00", "target15BB": "14:03:00", "target10BB": "14:11:00" },
+            { "startTime": "14:00:00", "name": "클래식 370억 GTD", "buyin": 370000000, "maxRegTime": "15:29:00", "target20BB": "14:42:00", "target15BB": "14:48:00", "target10BB": "15:05:00" },
+            { "startTime": "14:00:00", "name": "비기너스 4억 GTD", "buyin": 700000, "maxRegTime": "14:50:00", "target20BB": "14:10:00", "target15BB": "14:15:00", "target10BB": "14:25:00" },
+            { "startTime": "14:15:00", "name": "클래식 90억 GTD", "buyin": 80000000, "maxRegTime": "15:32:00", "target20BB": "15:02:00", "target15BB": "15:08:00", "target10BB": "15:20:00" },
+            { "startTime": "14:15:00", "name": "스텝업 터보 7억 GTD", "buyin": 6000000, "maxRegTime": "15:00:00", "target20BB": "14:35:00", "target15BB": "14:39:00", "target10BB": "14:47:00" },
+            { "startTime": "14:30:00", "name": "클래식 바운티 160억 GTD", "buyin": 160000000, "maxRegTime": "16:04:00", "target20BB": "15:12:00", "target15BB": "15:18:00", "target10BB": "15:35:00" },
+            { "startTime": "14:30:00", "name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "15:23:00", "target20BB": "14:50:00", "target15BB": "14:54:00", "target10BB": "15:07:00" },
+            { "startTime": "15:00:00", "name": "클래식 400억 GTD", "buyin": 220000000, "maxRegTime": "16:29:00", "target20BB": "15:42:00", "target15BB": "15:48:00", "target10BB": "16:05:00" },
+            { "startTime": "15:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "15:10:00", "target20BB": "15:04:00", "target15BB": "15:04:00", "target10BB": "15:08:00" },
+            { "startTime": "15:15:00", "name": "스텝업 바운티 16억 GTD", "buyin": 10000000, "maxRegTime": "16:32:00", "target20BB": "16:02:00", "target15BB": "16:08:00", "target10BB": "16:20:00" },
+            { "startTime": "15:30:00", "name": "클래식 프리즈아웃 60억 GTD", "buyin": 60000000, "maxRegTime": "16:47:00", "target20BB": "16:17:00", "target15BB": "16:23:00", "target10BB": "16:35:00" },
+            { "startTime": "15:30:00", "name": "루키스 터보 5억 GTD", "buyin": 3000000, "maxRegTime": "16:15:00", "target20BB": "15:38:00", "target15BB": "15:42:00", "target10BB": "15:50:00" },
+            { "startTime": "16:00:00", "name": "클래식 330억 GTD", "buyin": 330000000, "maxRegTime": "17:29:00", "target20BB": "16:42:00", "target15BB": "16:48:00", "target10BB": "17:05:00" },
+            { "startTime": "16:00:00", "name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "16:50:00", "target20BB": "16:10:00", "target15BB": "16:15:00", "target10BB": "16:25:00" },
+            { "startTime": "16:15:00", "name": "클래식 90억 GTD", "buyin": 80000000, "maxRegTime": "17:32:00", "target20BB": "17:02:00", "target15BB": "17:08:00", "target10BB": "17:20:00" },
+            { "startTime": "16:15:00", "name": "스텝업 터보 9억 GTD", "buyin": 6000000, "maxRegTime": "17:00:00", "target20BB": "16:35:00", "target15BB": "16:39:00", "target10BB": "16:47:00" },
+            { "startTime": "16:30:00", "name": "클래식 바운티 220억 GTD", "buyin": 220000000, "maxRegTime": "18:04:00", "target20BB": "17:12:00", "target15BB": "17:18:00", "target10BB": "17:35:00" },
+            { "startTime": "16:30:00", "name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "17:23:00", "target20BB": "16:50:00", "target15BB": "16:54:00", "target10BB": "17:07:00" },
+            { "startTime": "17:00:00", "name": "클래식 400억 GTD", "buyin": 220000000, "maxRegTime": "18:29:00", "target20BB": "17:42:00", "target15BB": "17:48:00", "target10BB": "18:05:00" },
+            { "startTime": "17:00:00", "name": "프리롤 5천만 GTD", "buyin": 0, "maxRegTime": "17:10:00", "target20BB": "17:04:00", "target15BB": "17:04:00", "target10BB": "17:08:00" },
+            { "startTime": "17:15:00", "name": "워밍업 25억 GTD", "buyin": 10000000, "maxRegTime": "18:32:00", "target20BB": "18:02:00", "target15BB": "18:08:00", "target10BB": "18:20:00" },
+            { "startTime": "17:30:00", "name": "클래식 100억 GTD", "buyin": 80000000, "maxRegTime": "18:47:00", "target20BB": "18:17:00", "target15BB": "18:23:00", "target10BB": "18:35:00" },
+            { "startTime": "17:30:00", "name": "루키스 3억 GTD", "buyin": 1200000, "maxRegTime": "18:25:00", "target20BB": "17:40:00", "target15BB": "17:45:00", "target10BB": "17:55:00" },
+            { "startTime": "18:00:00", "name": "데일리 스페셜 450억 GTD", "buyin": 330000000, "maxRegTime": "19:29:00", "target20BB": "18:42:00", "target15BB": "18:48:00", "target10BB": "19:05:00" },
+            { "startTime": "18:00:00", "name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "18:50:00", "target20BB": "18:10:00", "target15BB": "18:15:00", "target10BB": "18:25:00" },
+            { "startTime": "18:15:00", "name": "스텝업 터보 9억 GTD", "buyin": 6000000, "maxRegTime": "19:00:00", "target20BB": "18:35:00", "target15BB": "18:39:00", "target10BB": "18:47:00" },
+            { "startTime": "18:15:00", "name": "클래식 70억 GTD", "buyin": 35000000, "maxRegTime": "19:32:00", "target20BB": "19:02:00", "target15BB": "19:08:00", "target10BB": "19:20:00" },
+            { "startTime": "18:30:00", "name": "클래식 165억 GTD", "buyin": 110000000, "maxRegTime": "20:04:00", "target20BB": "19:12:00", "target15BB": "19:18:00", "target10BB": "19:35:00" },
+            { "startTime": "18:30:00", "name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "19:23:00", "target20BB": "18:50:00", "target15BB": "18:54:00", "target10BB": "19:07:00" },
+            { "startTime": "19:00:00", "name": "데일리 스페셜 500억 GTD", "buyin": 330000000, "maxRegTime": "20:29:00", "target20BB": "19:42:00", "target15BB": "19:48:00", "target10BB": "20:05:00" },
+            { "startTime": "19:00:00", "name": "프리롤 1억 GTD", "buyin": 0, "maxRegTime": "19:10:00", "target20BB": "19:04:00", "target15BB": "19:04:00", "target10BB": "19:08:00" },
+            { "startTime": "19:15:00", "name": "클래식 70억 GTD", "buyin": 60000000, "maxRegTime": "20:32:00", "target20BB": "20:02:00", "target15BB": "20:08:00", "target10BB": "20:20:00" },
+            { "startTime": "19:15:00", "name": "워밍업 터보 24억 GTD", "buyin": 12000000, "maxRegTime": "20:08:00", "target20BB": "19:35:00", "target15BB": "19:39:00", "target10BB": "19:47:00" },
+            { "startTime": "19:30:00", "name": "클래식 50억 GTD", "buyin": 35000000, "maxRegTime": "20:47:00", "target20BB": "20:17:00", "target15BB": "20:23:00", "target10BB": "20:35:00" },
+            { "startTime": "19:30:00", "name": "클래식 165억 GTD", "buyin": 110000000, "maxRegTime": "21:04:00", "target20BB": "20:12:00", "target15BB": "20:18:00", "target10BB": "20:35:00" },
+            { "startTime": "19:30:00", "name": "루키스 터보 5억 GTD", "buyin": 3000000, "maxRegTime": "20:15:00", "target20BB": "19:38:00", "target15BB": "19:42:00", "target10BB": "19:50:00" },
+            { "startTime": "20:00:00", "name": "데일리 스페셜 550억 GTD", "buyin": 370000000, "maxRegTime": "21:29:00", "target20BB": "20:42:00", "target15BB": "20:48:00", "target10BB": "21:05:00" },
+            { "startTime": "20:00:00", "name": "비기너스 4억 GTD", "buyin": 700000, "maxRegTime": "20:50:00", "target20BB": "20:10:00", "target15BB": "20:15:00", "target10BB": "20:25:00" },
+            { "startTime": "20:15:00", "name": "클래식 프리즈아웃 90억 GTD", "buyin": 80000000, "maxRegTime": "21:32:00", "target20BB": "21:02:00", "target15BB": "21:08:00", "target10BB": "21:20:00" },
+            { "startTime": "20:15:00", "name": "스텝업 터보 14억 GTD", "buyin": 7000000, "maxRegTime": "21:00:00", "target20BB": "20:35:00", "target15BB": "20:39:00", "target10BB": "20:47:00" },
+            { "startTime": "20:30:00", "name": "클래식 270억 GTD", "buyin": 180000000, "maxRegTime": "22:04:00", "target20BB": "21:12:00", "target15BB": "21:18:00", "target10BB": "21:35:00" },
+            { "startTime": "20:30:00", "name": "클래식 70억 GTD", "buyin": 45000000, "maxRegTime": "21:47:00", "target20BB": "21:17:00", "target15BB": "21:23:00", "target10BB": "21:35:00" },
+            { "startTime": "21:00:00", "name": "위켄드 빌리언즈 미니 100억 GTD(주말)", "buyin": 60000000, "maxRegTime": "22:17:00", "target20BB": "21:54:00", "target15BB": "22:03:00", "target10BB": "22:11:00" },
+            { "startTime": "21:00:00", "name": "데일리 메인 1,600억 GTD(평일)", "buyin": 400000000, "maxRegTime": "22:29:00", "target20BB": "21:42:00", "target15BB": "21:48:00", "target10BB": "22:05:00" },
+            { "startTime": "21:00:00", "name": "위켄드 빌리언즈 3,200억 GTD(주말)", "buyin": 800000000, "maxRegTime": "22:29:00", "target20BB": "21:42:00", "target15BB": "21:48:00", "target10BB": "22:05:00" },
+            { "startTime": "21:00:00", "name": "데일리 미니 메인 150억 GTD(평일)", "buyin": 25000000, "maxRegTime": "22:17:00", "target20BB": "21:54:00", "target15BB": "22:03:00", "target10BB": "22:11:00" },
+            { "startTime": "21:00:00", "name": "프리롤 1억 GTD", "buyin": 0, "maxRegTime": "21:10:00", "target20BB": "21:04:00", "target15BB": "21:04:00", "target10BB": "21:08:00" },
+            { "startTime": "21:15:00", "name": "클래식 65억 GTD(평일)", "buyin": 60000000, "maxRegTime": "22:32:00", "target20BB": "22:02:00", "target15BB": "22:08:00", "target10BB": "22:20:00" },
+            { "startTime": "21:15:00", "name": "클래식 60억 GTD(주말)", "buyin": 35000000, "maxRegTime": "22:32:00", "target20BB": "22:02:00", "target15BB": "22:08:00", "target10BB": "22:20:00" },
+            { "startTime": "21:30:00", "name": "클래식 200억 GTD(매일)", "buyin": 110000000, "maxRegTime": "23:04:00", "target20BB": "22:12:00", "target15BB": "22:18:00", "target10BB": "22:35:00" },
+            { "startTime": "21:30:00", "name": "스텝업 터보 15억 GTD(매일)", "buyin": 6000000, "maxRegTime": "22:15:00", "target20BB": "21:54:00", "target15BB": "21:58:00", "target10BB": "22:06:00" },
+            { "startTime": "22:00:00", "name": "데일리 스페셜 하이롤러 800억 GTD", "buyin": 550000000, "maxRegTime": "00:02:00", "target20BB": "23:08:00", "target15BB": "23:16:00", "target10BB": "23:38:00" },
+            { "startTime": "22:00:00", "name": "비기너스 1억 GTD", "buyin": 200000, "maxRegTime": "22:50:00", "target20BB": "22:10:00", "target15BB": "22:15:00", "target10BB": "22:25:00" },
+            { "startTime": "22:15:00", "name": "스텝업 터보 18억 GTD", "buyin": 10000000, "maxRegTime": "23:08:00", "target20BB": "22:35:00", "target15BB": "22:39:00", "target10BB": "22:47:00" },
+            { "startTime": "22:15:00", "name": "클래식 200억 GTD", "buyin": 110000000, "maxRegTime": "23:44:00", "target20BB": "23:02:00", "target15BB": "23:08:00", "target10BB": "23:20:00" },
+            { "startTime": "22:30:00", "name": "클래식 90억 GTD", "buyin": 55000000, "maxRegTime": "23:47:00", "target20BB": "23:17:00", "target15BB": "23:23:00", "target10BB": "23:35:00" },
+            { "startTime": "22:30:00", "name": "데일리 스페셜 500억 GTD", "buyin": 250000000, "maxRegTime": "23:59:00", "target20BB": "23:12:00", "target15BB": "23:18:00", "target10BB": "23:35:00" },
+            { "startTime": "23:00:00", "name": "데일리 스페셜 슈퍼 하이롤러 1,200억 GTD", "buyin": 1000000000, "maxRegTime": "01:02:00", "target20BB": "00:08:00", "target15BB": "00:16:00", "target10BB": "00:38:00" },
+            { "startTime": "23:00:00", "name": "프리롤 1억 GTD", "buyin": 0, "maxRegTime": "23:10:00", "target20BB": "23:04:00", "target15BB": "23:04:00", "target10BB": "23:08:00" },
+            { "startTime": "23:15:00", "name": "스텝업 터보 18억 GTD", "buyin": 10000000, "maxRegTime": "00:08:00", "target20BB": "23:35:00", "target15BB": "23:39:00", "target10BB": "23:47:00" },
+            { "startTime": "23:15:00", "name": "클래식 200억 GTD", "buyin": 110000000, "maxRegTime": "00:44:00", "target20BB": "00:02:00", "target15BB": "00:08:00", "target10BB": "00:20:00" },
+            { "startTime": "23:30:00", "name": "클래식 70억 GTD", "buyin": 45000000, "maxRegTime": "00:47:00", "target20BB": "00:17:00", "target15BB": "00:23:00", "target10BB": "00:35:00" },
+            { "startTime": "23:30:00", "name": "데일리 스페셜 500억 GTD", "buyin": 300000000, "maxRegTime": "00:59:00", "target20BB": "00:12:00", "target15BB": "00:18:00", "target10BB": "00:35:00" }
         ];
 
         let showAllBox = false;
+        let currentMode = 'max'; // 'max', '10', '15', '20'
 
-        // localStorage에서 값 불러오기
         const savedMin = localStorage.getItem('wpl_minBuyin');
         const savedMax = localStorage.getItem('wpl_maxBuyin');
         if (savedMin !== null) document.getElementById('minBuyin').value = savedMin;
         if (savedMax !== null) document.getElementById('maxBuyin').value = savedMax;
 
+        // BB 버튼 이벤트
+        document.querySelectorAll('.bb-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.bb-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentMode = this.dataset.mode;
+                
+                const modeText = currentMode === 'max' ? '맥스레잇 기준' : `${currentMode}BB 기준`;
+                document.getElementById('mode-badge-1').innerText = modeText;
+                document.getElementById('mode-badge-2').innerText = modeText;
+                document.getElementById('all-list-title').innerText = `✅ 현재 레지 가능한 전체 토너먼트 (${modeText})`;
+                
+                updateClockAndTournaments();
+            });
+        });
+
         function timeToSeconds(timeStr) {
+            if(!timeStr || timeStr === "null") return Infinity;
             let parts = timeStr.split(':');
             return parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]);
         }
@@ -325,54 +287,53 @@
             const h = Math.floor(totalSeconds / 3600);
             const m = Math.floor((totalSeconds % 3600) / 60);
             const s = Math.floor(totalSeconds % 60);
-
-            if (h > 0) {
-                return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-            }
+            if (h > 0) return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
             return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
         }
 
-        // 바이인 금액을 억, 만 단위로 포맷팅하는 함수
         function formatBuyin(amount) {
             if (amount === 0) return "프리롤";
-            
             const uk = Math.floor(amount / 100000000);
             const man = Math.floor((amount % 100000000) / 10000);
-            
             let result = [];
             if (uk > 0) result.push(`${uk}억`);
             if (man > 0) result.push(`${man.toLocaleString()}만`);
-            
             return result.length > 0 ? result.join(' ') : `${amount.toLocaleString()}원`;
         }
 
-        // 현재 시간이 토너먼트 진행 시간(startTime ~ maxRegTime) 내에 있는지 확인
-        function isCurrentlyRegisterable(t, nowSec) {
-            let s = timeToSeconds(t.startTime);
-            let e = timeToSeconds(t.maxRegTime);
-            if (e < s) e += 86400; // 자정 넘김 처리
+        function getTargetTime(t) {
+            if(currentMode === 'max') return t.maxRegTime;
+            return t[`target${currentMode}BB`];
+        }
 
-            // 오늘 시작한 토너
+        function isCurrentlyRegisterable(t, nowSec) {
+            let targetT = getTargetTime(t);
+            if(!targetT || targetT === "null") return false; // 해당 BB로 입장이 불가한 경우
+            
+            let s = timeToSeconds(t.startTime);
+            let e = timeToSeconds(targetT);
+            if (e < s) e += 86400;
+
             if (nowSec >= s && nowSec <= e) {
                 t.currentInstanceEndSec = e;
                 return true;
             }
             
-            // 어제 시작해서 현재 진행 중인 토너
             let s_yest = s - 86400;
             let e_yest = e - 86400;
             if (nowSec >= s_yest && nowSec <= e_yest) {
                 t.currentInstanceEndSec = e_yest;
                 return true;
             }
-            
             return false;
         }
 
         function formatResultHTML(tourney) {
-            if (!tourney) return `<div class="tourney-name">조건에 맞는 토너먼트가 없습니다.</div>`;
+            if (!tourney) return `<div class="tourney-name" style="color:#999; font-size:16px;">조건에 맞는 토너먼트가 없습니다.</div>`;
             const countdownStr = formatCountdown(tourney.diff);
             const buyinStr = formatBuyin(tourney.buyin);
+            const targetT = getTargetTime(tourney);
+            const timeLabel = currentMode === 'max' ? '맥스레잇' : `${currentMode}BB 진입`;
             
             return `
                 <div class="tourney-name">
@@ -380,7 +341,7 @@
                     <span class="countdown">${countdownStr}</span>
                 </div>
                 <div class="tourney-details">
-                    맥스레잇 레지: <span class="highlight">${tourney.maxRegTime}</span> 
+                    ${timeLabel}: <span class="highlight">${targetT}</span> 
                     (바이인: ${buyinStr})
                 </div>
             `;
@@ -393,7 +354,6 @@
             const s = String(now.getSeconds()).padStart(2, '0');
             const currentStr = `${h}:${m}:${s}`;
             
-            // 기간 필터링용 날짜 포맷 (YYYY-MM-DD)
             const yyyy = now.getFullYear();
             const MM = String(now.getMonth() + 1).padStart(2, '0');
             const dd = String(now.getDate()).padStart(2, '0');
@@ -405,42 +365,43 @@
             const minB = Number(document.getElementById('minBuyin').value) || 0;
             const maxB = Number(document.getElementById('maxBuyin').value) || Infinity;
 
-            // 1. 기간 및 바이인 필터링
             let filtered = tourneyData.filter(t => {
-                // 지정된 기간이 존재하는 특별 토너먼트의 경우, 현재 날짜가 범위 내인지 확인
                 if (t.startDate && currentDateStr < t.startDate) return false;
                 if (t.endDate && currentDateStr > t.endDate) return false;
+                
+                let targetT = getTargetTime(t);
+                if(!targetT || targetT === "null") return false; // 해당 BB 타겟을 이미 넘어 맥레레로 진입불가인 토너 제외
                 
                 return t.buyin >= minB && t.buyin <= maxB;
             });
             
             filtered.forEach(t => {
-                let tSec = timeToSeconds(t.maxRegTime);
+                let targetT = getTargetTime(t);
+                let tSec = timeToSeconds(targetT);
                 let diff = tSec - nowSec;
                 if (diff < 0) diff += 86400; 
                 t.diff = diff;
             });
 
-            // 시간 차이 오름차순으로 가장 가까운 것 찾기
             let sortedForNext = [...filtered].sort((a, b) => a.diff - b.diff);
 
             document.getElementById('closest-tourney').innerHTML = formatResultHTML(sortedForNext[0] || null);
             document.getElementById('next-tourney').innerHTML = formatResultHTML(sortedForNext[1] || null);
 
-            // 2. 모든 토너먼트 표시 (버튼 클릭 시)
             if (showAllBox) {
                 let registerable = filtered.filter(t => isCurrentlyRegisterable(t, nowSec));
-                
-                // 바이인 기준 역순(내림차순) 정렬
                 registerable.sort((a, b) => b.buyin - a.buyin);
 
                 let allHtml = '';
                 if (registerable.length === 0) {
-                    allHtml = '<div style="margin-top: 10px;">현재 레지 가능한 토너먼트가 없습니다.</div>';
+                    allHtml = '<div style="margin-top: 10px; color:#777;">현재 지정된 기준에 맞춰 입장 가능한 토너먼트가 없습니다.</div>';
                 } else {
                     registerable.forEach(t => {
                         let diffToClose = t.currentInstanceEndSec - nowSec;
                         let buyinStr = formatBuyin(t.buyin);
+                        let targetT = getTargetTime(t);
+                        let timeLabel = currentMode === 'max' ? '맥스레잇' : `${currentMode}BB 진입`;
+                        
                         allHtml += `
                             <div class="all-list-item">
                                 <div class="tourney-name">
@@ -449,7 +410,7 @@
                                 </div>
                                 <div class="tourney-details">
                                     시작: <span class="highlight">${t.startTime}</span> ~ 
-                                    마감: <span class="highlight">${t.maxRegTime}</span> 
+                                    ${timeLabel}: <span class="highlight">${targetT}</span> 
                                     (바이인: ${buyinStr})
                                 </div>
                             </div>
@@ -460,7 +421,6 @@
             }
         }
         
-        // 버튼 이벤트 
         document.getElementById('showAllBtn').addEventListener('click', () => {
             showAllBox = !showAllBox;
             document.getElementById('all-tourneys-box').style.display = showAllBox ? 'block' : 'none';
@@ -470,7 +430,6 @@
             updateClockAndTournaments();
         });
 
-        // 입력 값 변경 시 localStorage 저장 및 업데이트
         document.getElementById('minBuyin').addEventListener('input', function() {
             localStorage.setItem('wpl_minBuyin', this.value);
             updateClockAndTournaments();
