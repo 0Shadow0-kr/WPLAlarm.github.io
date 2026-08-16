@@ -32,12 +32,13 @@
         .input-group input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 60%; font-size: 16px; }
         
         .bb-buttons {
-            display: flex; gap: 10px; margin-top: 10px; justify-content: center;
+            display: flex; gap: 8px; margin-top: 10px; justify-content: center;
         }
         .bb-btn {
-            flex: 1; padding: 12px; font-size: 16px; font-weight: bold;
+            flex: 1; padding: 10px 2px; font-size: 14px; font-weight: bold;
             border: none; border-radius: 6px; cursor: pointer;
             background-color: #ecf0f1; color: #34495e; transition: all 0.2s;
+            white-space: nowrap;
         }
         .bb-btn.active {
             background-color: #3498db; color: #fff; box-shadow: inset 0 3px 5px rgba(0,0,0,0.2);
@@ -92,10 +93,11 @@
             <input type="number" id="maxBuyin" value="1000000000" step="1000000">
         </div>
         <div class="bb-buttons">
-            <button class="bb-btn active" data-mode="max">맥스레잇</button>
-            <button class="bb-btn" data-mode="10">10BB</button>
-            <button class="bb-btn" data-mode="15">15BB</button>
+            <button class="bb-btn" data-mode="early">얼리레지</button>
             <button class="bb-btn" data-mode="20">20BB</button>
+            <button class="bb-btn" data-mode="15">15BB</button>
+            <button class="bb-btn" data-mode="10">10BB</button>
+            <button class="bb-btn active" data-mode="max">맥스레잇</button>
         </div>
     </div>
 
@@ -150,7 +152,7 @@
             { "startTime": "04:00:00", "name": "비기너스 4천만 GTD", "buyin": 100000, "maxRegTime": "04:50:00", "target20BB": "04:10:00", "target15BB": "04:15:00", "target10BB": "04:25:00" },
             { "startTime": "04:15:00", "name": "스텝업 터보 7억 GTD", "buyin": 6000000, "maxRegTime": "05:00:00", "target20BB": "04:35:00", "target15BB": "04:39:00", "target10BB": "04:47:00" },
             { "startTime": "04:30:00", "name": "클래식 60억 GTD", "buyin": 77000000, "maxRegTime": "05:47:00", "target20BB": "05:17:00", "target15BB": "05:23:00", "target10BB": "05:35:00" },
-            { "startTime": "05:00:00", "name": "워밍업 20억 GTD", "buyin": 30000000, "maxRegTime": "05:45:00", "target20BB": "05:20:00", "target15BB": "05:24:00", "target10BB": "05:32:00" },
+            { "startTime": "05:00:00", "name": "워밍업 20억 GTD", "buyin": 30000000, "maxRegTime": "06:17:00", "target20BB": "05:42:00", "target15BB": "05:48:00", "target10BB": "06:05:00" },
             { "startTime": "05:00:00", "name": "프리롤 3천만 GTD", "buyin": 0, "maxRegTime": "05:10:00", "target20BB": "05:04:00", "target15BB": "05:04:00", "target10BB": "05:08:00" },
             { "startTime": "05:15:00", "name": "루키스 터보 3.5억 GTD", "buyin": 3000000, "maxRegTime": "06:00:00", "target20BB": "05:23:00", "target15BB": "05:27:00", "target10BB": "05:35:00" },
             { "startTime": "05:30:00", "name": "스텝업 바운티 터보 10억 GTD", "buyin": 10000000, "maxRegTime": "06:23:00", "target20BB": "05:54:00", "target15BB": "06:03:00", "target10BB": "06:11:00" },
@@ -254,24 +256,32 @@
         ];
 
         let showAllBox = false;
-        let currentMode = 'max'; // 'max', '10', '15', '20'
+        let currentMode = 'max'; // 'early', 'max', '10', '15', '20'
 
         const savedMin = localStorage.getItem('wpl_minBuyin');
         const savedMax = localStorage.getItem('wpl_maxBuyin');
         if (savedMin !== null) document.getElementById('minBuyin').value = savedMin;
         if (savedMax !== null) document.getElementById('maxBuyin').value = savedMax;
 
-        // BB 버튼 이벤트
+        // BB 및 얼리레지 버튼 이벤트
         document.querySelectorAll('.bb-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.bb-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 currentMode = this.dataset.mode;
                 
-                const modeText = currentMode === 'max' ? '맥스레잇 기준' : `${currentMode}BB 기준`;
+                const modeText = currentMode === 'max' ? '맥스레잇 기준' : 
+                                 currentMode === 'early' ? '얼리레지 기준' : 
+                                 `${currentMode}BB 기준`;
+                                 
                 document.getElementById('mode-badge-1').innerText = modeText;
                 document.getElementById('mode-badge-2').innerText = modeText;
-                document.getElementById('all-list-title').innerText = `✅ 현재 레지 가능한 전체 토너먼트 (${modeText})`;
+                
+                if (currentMode === 'early') {
+                    document.getElementById('all-list-title').innerText = `✅ 시작 1시간 이내 대기중인 토너먼트 (얼리레지)`;
+                } else {
+                    document.getElementById('all-list-title').innerText = `✅ 현재 레지 가능한 전체 토너먼트 (${modeText})`;
+                }
                 
                 updateClockAndTournaments();
             });
@@ -303,15 +313,30 @@
 
         function getTargetTime(t) {
             if(currentMode === 'max') return t.maxRegTime;
+            if(currentMode === 'early') return t.startTime;
             return t[`target${currentMode}BB`];
         }
 
         function isCurrentlyRegisterable(t, nowSec) {
             let targetT = getTargetTime(t);
-            if(!targetT || targetT === "null") return false; // 해당 BB로 입장이 불가한 경우
+            if(!targetT || targetT === "null") return false;
             
             let s = timeToSeconds(t.startTime);
             let e = timeToSeconds(targetT);
+            
+            // 얼리레지 모드일 경우 시작 시간(startTime)까지만 카운트하므로 
+            // e === s가 되어 일반적인 로직으로는 잡히지 않음.
+            // 따라서 얼리레지 모드에서는 '시작 1시간 전 ~ 시작 직전'을 범위로 잡아줌
+            if (currentMode === 'early') {
+                let diffToStart = e - nowSec;
+                if (diffToStart < 0) diffToStart += 86400;
+                if (diffToStart <= 3600) { // 1시간 이내
+                    t.currentInstanceEndSec = (nowSec + diffToStart) % 86400;
+                    return true;
+                }
+                return false;
+            }
+
             if (e < s) e += 86400;
 
             if (nowSec >= s && nowSec <= e) {
@@ -333,7 +358,9 @@
             const countdownStr = formatCountdown(tourney.diff);
             const buyinStr = formatBuyin(tourney.buyin);
             const targetT = getTargetTime(tourney);
-            const timeLabel = currentMode === 'max' ? '맥스레잇' : `${currentMode}BB 진입`;
+            const timeLabel = currentMode === 'max' ? '맥스레잇' : 
+                              currentMode === 'early' ? '얼리레지' : 
+                              `${currentMode}BB 진입`;
             
             return `
                 <div class="tourney-name">
@@ -370,7 +397,7 @@
                 if (t.endDate && currentDateStr > t.endDate) return false;
                 
                 let targetT = getTargetTime(t);
-                if(!targetT || targetT === "null") return false; // 해당 BB 타겟을 이미 넘어 맥레레로 진입불가인 토너 제외
+                if(!targetT || targetT === "null") return false; // 해당 타겟으로 진입 불가인 토너 제외
                 
                 return t.buyin >= minB && t.buyin <= maxB;
             });
@@ -394,13 +421,15 @@
 
                 let allHtml = '';
                 if (registerable.length === 0) {
-                    allHtml = '<div style="margin-top: 10px; color:#777;">현재 지정된 기준에 맞춰 입장 가능한 토너먼트가 없습니다.</div>';
+                    allHtml = `<div style="margin-top: 10px; color:#777;">${currentMode === 'early' ? '1시간 이내에 시작하는 토너먼트가 없습니다.' : '현재 지정된 기준에 맞춰 입장 가능한 토너먼트가 없습니다.'}</div>`;
                 } else {
                     registerable.forEach(t => {
                         let diffToClose = t.currentInstanceEndSec - nowSec;
                         let buyinStr = formatBuyin(t.buyin);
                         let targetT = getTargetTime(t);
-                        let timeLabel = currentMode === 'max' ? '맥스레잇' : `${currentMode}BB 진입`;
+                        let timeLabel = currentMode === 'max' ? '맥스레잇' : 
+                                        currentMode === 'early' ? '얼리레지' : 
+                                        `${currentMode}BB 진입`;
                         
                         allHtml += `
                             <div class="all-list-item">
