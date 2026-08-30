@@ -92,6 +92,10 @@
             <label for="maxBuyin">최대 바이인</label>
             <input type="number" id="maxBuyin" value="1000000000" step="1000000">
         </div>
+        <div class="input-group">
+            <label for="displayCount">보여줄 개수</label>
+            <input type="number" id="displayCount" value="2" min="1" max="10" step="1">
+        </div>
         <div class="bb-buttons">
             <button class="bb-btn" data-mode="early">얼리레지</button>
             <button class="bb-btn" data-mode="20">20BB</button>
@@ -101,22 +105,20 @@
         </div>
     </div>
 
-    <div class="result-box">
-        <h3>🔥 가장 가까운 입장 타이밍 <span id="mode-badge-1" class="mode-badge">맥스레잇 기준</span></h3>
-        <div id="closest-tourney" class="tourney-item">-</div>
-        
-        <h3>⏳ 그 다음 입장 타이밍 <span id="mode-badge-2" class="mode-badge">맥스레잇 기준</span></h3>
-        <div id="next-tourney" class="tourney-item">-</div>
+    <!-- 다이나믹하게 렌더링될 메인 결과 박스 -->
+    <div class="result-box" id="upcoming-container">
+        <!-- JS에서 동적으로 채워집니다 -->
     </div>
 
     <button id="showAllBtn">레지 가능한 모든 토너 보기</button>
 
-    <div id="all-tourneys-box" class="result-box" style="display: none;">
+    <div id="all-tourneys-box" class="result-box" style="display: none; margin-top: 20px;">
         <h3 id="all-list-title">✅ 현재 레지 가능한 전체 토너먼트 (맥스레잇 기준)</h3>
         <div id="all-tourneys-content"></div>
     </div>
 
     <script>
+        // (토너먼트 데이터는 생략 없이 그대로 유지했습니다)
         const tourneyData = [
             { "startTime": "17:00:00", "name": "[제8회 홀덤 마스터스] 프리롤 - 7억 티켓 20장 GTD", "buyin": 0, "maxRegTime": "17:30:00", "startDate": "2026-08-03", "endDate": "2026-10-01", "target20BB": "17:06:00", "target15BB": "17:09:00", "target10BB": "17:15:00" },
             { "startTime": "13:00:00", "name": "[제8회 홀덤 마스터스] 새틀 for 새틀 토너먼트", "buyin": 70000000, "maxRegTime": "13:30:00", "startDate": "2026-08-03", "endDate": "2026-10-01", "target20BB": "13:06:00", "target15BB": "13:09:00", "target10BB": "13:15:00" },
@@ -258,10 +260,13 @@
         let showAllBox = false;
         let currentMode = 'max'; // 'early', 'max', '10', '15', '20'
 
+        // localStorage 연동 추가
         const savedMin = localStorage.getItem('wpl_minBuyin');
         const savedMax = localStorage.getItem('wpl_maxBuyin');
+        const savedCount = localStorage.getItem('wpl_displayCount');
         if (savedMin !== null) document.getElementById('minBuyin').value = savedMin;
         if (savedMax !== null) document.getElementById('maxBuyin').value = savedMax;
+        if (savedCount !== null) document.getElementById('displayCount').value = savedCount;
 
         // BB 및 얼리레지 버튼 이벤트
         document.querySelectorAll('.bb-btn').forEach(btn => {
@@ -274,9 +279,6 @@
                                  currentMode === 'early' ? '얼리레지 기준' : 
                                  `${currentMode}BB 기준`;
                                  
-                document.getElementById('mode-badge-1').innerText = modeText;
-                document.getElementById('mode-badge-2').innerText = modeText;
-                
                 if (currentMode === 'early') {
                     document.getElementById('all-list-title').innerText = `✅ 시작 1시간 이내 대기중인 토너먼트 (얼리레지)`;
                 } else {
@@ -324,13 +326,10 @@
             let s = timeToSeconds(t.startTime);
             let e = timeToSeconds(targetT);
             
-            // 얼리레지 모드일 경우 시작 시간(startTime)까지만 카운트하므로 
-            // e === s가 되어 일반적인 로직으로는 잡히지 않음.
-            // 따라서 얼리레지 모드에서는 '시작 1시간 전 ~ 시작 직전'을 범위로 잡아줌
             if (currentMode === 'early') {
                 let diffToStart = e - nowSec;
                 if (diffToStart < 0) diffToStart += 86400;
-                if (diffToStart <= 3600) { // 1시간 이내
+                if (diffToStart <= 3600) { 
                     t.currentInstanceEndSec = (nowSec + diffToStart) % 86400;
                     return true;
                 }
@@ -354,7 +353,6 @@
         }
 
         function formatResultHTML(tourney) {
-            if (!tourney) return `<div class="tourney-name" style="color:#999; font-size:16px;">조건에 맞는 토너먼트가 없습니다.</div>`;
             const countdownStr = formatCountdown(tourney.diff);
             const buyinStr = formatBuyin(tourney.buyin);
             const targetT = getTargetTime(tourney);
@@ -391,13 +389,15 @@
             const nowSec = timeToSeconds(currentStr);
             const minB = Number(document.getElementById('minBuyin').value) || 0;
             const maxB = Number(document.getElementById('maxBuyin').value) || Infinity;
+            // 입력한 개수 가져오기 (기본값 2)
+            const displayCount = Number(document.getElementById('displayCount').value) || 2; 
 
             let filtered = tourneyData.filter(t => {
                 if (t.startDate && currentDateStr < t.startDate) return false;
                 if (t.endDate && currentDateStr > t.endDate) return false;
                 
                 let targetT = getTargetTime(t);
-                if(!targetT || targetT === "null") return false; // 해당 타겟으로 진입 불가인 토너 제외
+                if(!targetT || targetT === "null") return false; 
                 
                 return t.buyin >= minB && t.buyin <= maxB;
             });
@@ -412,9 +412,31 @@
 
             let sortedForNext = [...filtered].sort((a, b) => a.diff - b.diff);
 
-            document.getElementById('closest-tourney').innerHTML = formatResultHTML(sortedForNext[0] || null);
-            document.getElementById('next-tourney').innerHTML = formatResultHTML(sortedForNext[1] || null);
+            // 입력한 개수만큼 잘라서 HTML 생성
+            let upcomingItems = sortedForNext.slice(0, displayCount);
+            let upcomingHtml = '';
+            
+            if (upcomingItems.length === 0) {
+                upcomingHtml = `<div style="color:#999; font-size:16px; padding: 20px 0; text-align: center;">조건에 맞는 토너먼트가 없습니다.</div>`;
+            } else {
+                upcomingItems.forEach((tourney, index) => {
+                    let titlePrefix = index === 0 ? "🔥 가장 가까운" : `⏳ ${index + 1}번째로 가까운`;
+                    let modeText = currentMode === 'max' ? '맥스레잇 기준' : 
+                                   currentMode === 'early' ? '얼리레지 기준' : 
+                                   `${currentMode}BB 기준`;
 
+                    upcomingHtml += `
+                        <h3>${titlePrefix} 입장 타이밍 <span class="mode-badge">${modeText}</span></h3>
+                        <div class="tourney-item">
+                            ${formatResultHTML(tourney)}
+                        </div>
+                    `;
+                });
+            }
+            
+            document.getElementById('upcoming-container').innerHTML = upcomingHtml;
+
+            // 레지 가능한 전체 토너먼트 렌더링
             if (showAllBox) {
                 let registerable = filtered.filter(t => isCurrentlyRegisterable(t, nowSec));
                 registerable.sort((a, b) => b.buyin - a.buyin);
@@ -459,12 +481,17 @@
             updateClockAndTournaments();
         });
 
+        // 각 Input들 값 바뀔 때마다 로컬 스토리지에 저장 및 렌더링 업데이트
         document.getElementById('minBuyin').addEventListener('input', function() {
             localStorage.setItem('wpl_minBuyin', this.value);
             updateClockAndTournaments();
         });
         document.getElementById('maxBuyin').addEventListener('input', function() {
             localStorage.setItem('wpl_maxBuyin', this.value);
+            updateClockAndTournaments();
+        });
+        document.getElementById('displayCount').addEventListener('input', function() {
+            localStorage.setItem('wpl_displayCount', this.value);
             updateClockAndTournaments();
         });
         
